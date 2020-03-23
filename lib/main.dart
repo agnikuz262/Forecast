@@ -49,6 +49,9 @@ class _MyHomePageState extends State<MyHomePage> {
   String city = "Gliwice";
   bool isConnection = true;
 
+  void onTransition(Transition<ForecastEvent, ForecastState> transition) {
+    print(transition);
+  }
   @override
   void initState() {
     super.initState();
@@ -179,7 +182,8 @@ class _MyHomePageState extends State<MyHomePage> {
             Scaffold.of(context).showSnackBar(SnackBar(
                 backgroundColor: CustomStyles.accentColor,
                 content: Text(
-                    "Nie znaleziono podanego miasta. Spróbuj ponownie.")));
+                    "Nie znaleziono podanego miasta.")));
+            state = ForecastInitial();
           }
         },
       ));

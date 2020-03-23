@@ -33,6 +33,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
   @override
   Stream<ForecastState> mapEventToState(ForecastEvent event) async* {
     if (event is ForecastAddCityEvent) {
+      yield ForecastLoading();
       bool isConnection = false;
       await _checkConnection().then((answer) {
         isConnection = answer;
@@ -57,6 +58,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
     }
     if (event is ForecastCardDeleted) {
       globals.forecastList.removeAt(event.ind);
+      yield ForecastLoading();
       yield ForecastDeleted();
     }
     if (event is RefreshForecast) {

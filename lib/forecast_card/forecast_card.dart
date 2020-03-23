@@ -326,10 +326,10 @@ class _ForecastCardState extends State<ForecastCard>
 
   @override
   void dispose() {
-    sunController.dispose();
-    cloudsController.dispose();
+    sunController?.dispose();
+    cloudsController?.dispose();
+    stormController?.dispose();
     timer?.cancel();
-    bloc?.close();
     super.dispose();
   }
 }

@@ -50,9 +50,7 @@ class AlertDialogs {
             title: Text('Usuwanie prognozy'),
             content:
             Container(
-              //width: MediaQuery.of(context).size.width*0.6,
               padding: const EdgeInsets.all(8.0),
-             // height: 150.0,
               child: Column(
                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[

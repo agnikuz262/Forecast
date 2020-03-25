@@ -72,12 +72,12 @@ class _ForecastCardState extends State<ForecastCard>
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+      margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       color: Colors.white,
       elevation: 3.0,
       child: Padding(
-        padding: const EdgeInsets.all(30.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

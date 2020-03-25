@@ -52,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void onTransition(Transition<ForecastEvent, ForecastState> transition) {
     print(transition);
   }
+
   @override
   void initState() {
     super.initState();
@@ -119,74 +120,73 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Container _buildBlocConsumer() {
     return Container(
-          child: BlocConsumer<ForecastBloc, ForecastState>(
-        builder: (context, state) {
-          if (state is ForecastInitial) {
-            return Center();
-          }
-          if (state is ForecastLoading) {
-            return Center(
-                child: CircularProgressIndicator(
-              valueColor: CustomStyles.circularProgressColor,
-            ));
-          }
-          if (state is ForecastLoaded) {
+        child: BlocConsumer<ForecastBloc, ForecastState>(
+      builder: (context, state) {
+        if (state is ForecastInitial) {
+          return Center();
+        }
+        if (state is ForecastLoading) {
+          return Center(
+              child: CircularProgressIndicator(
+            valueColor: CustomStyles.circularProgressColor,
+          ));
+        }
+        if (state is ForecastLoaded) {
+          isConnection = true;
+          _refreshCompleter?.complete();
+          _refreshCompleter = Completer();
+          state = ForecastInitial();
+          return _buildView();
+        }
+        if (state is ForecastFailure) {
+          isConnection = false;
+          state = ForecastInitial();
+          return NoConnectionScreen();
+        }
+        if (state is ForecastDeleted) {
+          state = ForecastInitial();
+          return _buildView();
+        }
+        if (state is ForecastNotFound) {
+          state = ForecastInitial();
+          return _buildView();
+        } else
+          return Center(
+            child: Text(
+              "Coś poszło nie tak",
+              style: TextStyle(color: Colors.red),
+            ),
+          );
+      },
+      listener: (BuildContext context, ForecastState state) {
+        if (state is ForecastDeleted) {
+          setState(() {});
+          state = ForecastInitial();
+        }
+        if (state is ForecastLoaded) {
+          setState(() {
             isConnection = true;
-            _refreshCompleter?.complete();
-            _refreshCompleter = Completer();
-            state = ForecastInitial();
-            return _buildView();
-          }
-          if (state is ForecastFailure) {
+          });
+          state = ForecastInitial();
+        }
+        if (state is ForecastFailure) {
+          setState(() {
             isConnection = false;
-            state = ForecastInitial();
-            return NoConnectionScreen();
-          }
-          if (state is ForecastDeleted) {
-            state = ForecastInitial();
-            return _buildView();
-          }
-          if (state is ForecastNotFound) {
-            state = ForecastInitial();
-            return _buildView();
-          } else
-            return Center(
-              child: Text(
-                "Coś poszło nie tak",
-                style: TextStyle(color: Colors.red),
-              ),
-            );
-        },
-        listener: (BuildContext context, ForecastState state) {
-          if (state is ForecastDeleted) {
-            setState(() {});
-            state = ForecastInitial();
-          }
-          if (state is ForecastLoaded) {
-            setState(() {
-              isConnection = true;
-            });
-            state = ForecastInitial();
-          }
-          if (state is ForecastFailure) {
-            setState(() {
-              isConnection = false;
-            });
-            Scaffold.of(context).showSnackBar(SnackBar(
-                backgroundColor: CustomStyles.accentColor,
-                content: Text(
-                    "Nie można załadować prognozy. Sprawdź połączenie z Internetem.")));
-            state = ForecastInitial();
-          }
-          if (state is ForecastNotFound) {
-            Scaffold.of(context).showSnackBar(SnackBar(
-                backgroundColor: CustomStyles.accentColor,
-                content: Text(
-                    "Nie znaleziono podanego miasta.")));
-            state = ForecastInitial();
-          }
-        },
-      ));
+          });
+          Scaffold.of(context).showSnackBar(SnackBar(
+              backgroundColor: CustomStyles.accentColor,
+              content: Text(
+                  "Nie można załadować prognozy. Sprawdź połączenie z Internetem.")));
+          state = ForecastInitial();
+        }
+        if (state is ForecastNotFound) {
+          Scaffold.of(context).showSnackBar(SnackBar(
+              backgroundColor: CustomStyles.accentColor,
+              content: Text("Nie znaleziono podanego miasta.")));
+          state = ForecastInitial();
+        }
+      },
+    ));
   }
 
   Widget _buildView() {
@@ -209,11 +209,12 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             color: Colors.transparent,
             child: PageView(
-              children: <Widget>[
-                for (int i = 0; i < globals.forecastList.length; i++)
-                  globals.forecastList[i]
-              ],
-            ),
+                children: List.generate(globals.forecastList.length, (index) {
+              return globals.forecastList[index];
+            })
+//                for (int i = 0; i < globals.forecastList.length; i++)
+//                  globals.forecastList[i]
+                ),
           ),
         ],
       ),

@@ -35,12 +35,8 @@ class AlertDialogs {
                   String enteredCity = _cityController.text.toString();
                   bloc.add(ForecastAddCityEvent(city: enteredCity));
                   Navigator.of(context).pop();
-                },
-              )
-            ],
-          );
-        });
-  }
+          })]);
+        });}
 
   displayDeleteDialog(BuildContext context, Widget widget, ForecastBloc bloc) async {
     return showDialog(

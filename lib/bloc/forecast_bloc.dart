@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:bloc/bloc.dart';
 import 'package:forecast/bloc/forecast_event.dart';
 import 'package:forecast/bloc/forecast_state.dart';
-import 'package:forecast/api/weather_data.dart';
+import 'package:forecast/model/api/weather_data.dart';
 import 'package:forecast/forecast_card/forecast_card_list.dart' as globals;
 import '../forecast_card/forecast_card.dart';
 

@@ -20,16 +20,17 @@ void main() => runApp(BlocProvider<ForecastBloc>(
     ));
 
 class MyApp extends StatelessWidget {
-  final Color mainColor = MaterialColor(0xFF01579b, CustomStyles.color);
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return CupertinoApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: mainColor,
-      ),
+      theme: CupertinoThemeData(
+          primaryColor: CupertinoColors.activeBlue,
+          primaryContrastingColor: CupertinoColors.activeBlue,
+          scaffoldBackgroundColor: CupertinoColors.white,
+          textTheme:
+              CupertinoTextThemeData(primaryColor: CupertinoColors.activeBlue)),
       home: MyHomePage(title: 'Pogoda'),
     );
   }
@@ -63,60 +64,85 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomPadding: false,
-        appBar: _buildAppBar(),
-        backgroundColor: CustomStyles.lightPrimaryColor,
-        floatingActionButton: isConnection
-            ? new FloatingActionButton(
-                backgroundColor: CustomStyles.accentColor,
-                elevation: 7.0,
-                child: new Icon(Icons.add),
-                onPressed: () {
-                  AlertDialogs().displayAddDialog(context, bloc);
-                },
-              )
-            : Container(),
-        body: _buildBlocConsumer());
-  }
-
-  AppBar _buildAppBar() {
-    return new AppBar(
-      elevation: 4.0,
-      title: Row(
-        children: <Widget>[
-          Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                  decoration: new BoxDecoration(
-                      color: Colors.white70,
-                      borderRadius: BorderRadius.circular(50.0)),
-                  width: 37.0,
-                  height: 37.0),
-              SvgPicture.asset('assets/icons/umbrella1.svg',
-                  height: 30, width: 30)
-            ],
-          ),
-          SizedBox(width: 10.0),
-          Text(widget.title),
-          Spacer(),
-          Container(
-            width: 45.0,
-            child: FlatButton(
-              onPressed: () {
-                bloc.add(RefreshForecast());
-              },
-              child: Icon(
-                Icons.refresh,
-                color: Colors.white,
-              ),
-            ),
-          )
+    return CupertinoTabScaffold(
+      tabBar: CupertinoTabBar(
+        backgroundColor: CupertinoColors.white,
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.create), title: Text("Prognozy")),
+          BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.settings), title: Text("Ustawienia")),
         ],
       ),
+      tabBuilder: (context, i) {
+        switch (i) {
+          case 0:
+            return _buildBlocConsumer();
+            break;
+          case 1:
+            return CupertinoPageScaffold(
+                child: Center(
+              child: Text("Ustawienia"),
+            ));
+            break;
+          default:
+            return _buildBlocConsumer();
+            break;
+        }
+      },
+      resizeToAvoidBottomInset: false,
+      // navigationBar: _buildAppBar(),
+      backgroundColor: CupertinoColors.white,
+//        floatingActionButton: isConnection
+//            ? new FloatingActionButton(
+//                backgroundColor: CustomStyles.accentColor,
+//                elevation: 7.0,
+//                child: new Icon(Icons.add),
+//                onPressed: () {
+//                  AlertDialogs().displayAddDialog(context, bloc);
+//                },
+//              )
+//            : Container(),
     );
   }
+
+//  AppBar _buildAppBar() {
+//    return BottomNa(
+//      elevation: 4.0,
+//      title: Row(
+//        children: <Widget>[
+//          Stack(
+//            alignment: Alignment.center,
+//            children: <Widget>[
+//              Container(
+//                  decoration: new BoxDecoration(
+//                      color: Colors.white70,
+//                      borderRadius: BorderRadius.circular(50.0)),
+//                  width: 37.0,
+//                  height: 37.0),
+//              SvgPicture.asset('assets/icons/umbrella1.svg',
+//                  height: 30, width: 30)
+//            ],
+//          ),
+//          SizedBox(width: 10.0),
+//          Text(widget.title),
+//          Spacer(),
+//          Container(
+//            width: 45.0,
+//            child: FlatButton(
+//              onPressed: () {
+//                bloc.add(RefreshForecast());
+//              },
+//              child: Icon(
+//                CupertinoIcons.refresh
+//                color: Colors.white,
+//              ),
+//            ),
+//          )
+//        ],
+//      ),
+//    );
+//  }
 
   Container _buildBlocConsumer() {
     return Container(
@@ -127,8 +153,9 @@ class _MyHomePageState extends State<MyHomePage> {
         }
         if (state is ForecastLoading) {
           return Center(
-              child: CircularProgressIndicator(
-            valueColor: CustomStyles.circularProgressColor,
+              child: CupertinoActivityIndicator(
+            animating: true,
+            radius: 15.0,
           ));
         }
         if (state is ForecastLoaded) {
@@ -179,12 +206,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   "Nie można załadować prognozy. Sprawdź połączenie z Internetem.")));
           state = ForecastInitial();
         }
-        if (state is ForecastNotFound) {
-          Scaffold.of(context).showSnackBar(SnackBar(
-              backgroundColor: CustomStyles.accentColor,
-              content: Text("Nie znaleziono podanego miasta.")));
-          state = ForecastInitial();
-        }
+//        if (state is ForecastNotFound) {
+//          Scaffold.of(context).showSnackBar(SnackBar(
+//              backgroundColor: CustomStyles.accentColor,
+//              content: Text("Nie znaleziono podanego miasta.")));
+//          state = ForecastInitial();
+//        }
       },
     ));
   }
@@ -193,28 +220,61 @@ class _MyHomePageState extends State<MyHomePage> {
     return SafeArea(
       bottom: true,
       child: Stack(
+        alignment: Alignment.center,
         children: <Widget>[
-          Container(
-            color: CustomStyles.lightPrimaryColor,
-          ),
+          Container(),
+//          Padding(
+//            padding: const EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 50.0),
+//            child: Center(
+//                child: Text(
+//              "Brak prognoz, dodaj nową za pomocą przycisku w prawym dolnym rogu",
+//              textAlign: TextAlign.center,
+//              style: TextStyle(color: CupertinoColors.activeBlue),
+//            )),
+//          ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 50.0),
-            child: Center(
-                child: Text(
-              "Brak prognoz, dodaj nową za pomocą przycisku w prawym dolnym rogu",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: CustomStyles.primaryColor),
-            )),
-          ),
-          Container(
-            color: Colors.transparent,
-            child: PageView(
-                children: List.generate(globals.forecastList.length, (index) {
-              return globals.forecastList[index];
-            })
-//                for (int i = 0; i < globals.forecastList.length; i++)
-//                  globals.forecastList[i]
-                ),
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                CupertinoButton(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 10.0),
+                    color: CupertinoColors.activeBlue,
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Text(
+                      "Dodaj nową prognozę",
+                      style: TextStyle(color: CupertinoColors.white),
+                    ),
+                    onPressed: () {
+                      return showCupertinoModalPopup<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return CupertinoActionSheet(
+                                actions: <Widget>[
+                                  CupertinoActionSheetAction(
+                                      child: Text("Dodaj miasto"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      }),
+                                  CupertinoActionSheetAction(
+                                    child: Text("Dodaj za pomocą lokalizacji"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                                title: Text("Dodaj nową prognozę"),
+                                cancelButton: CupertinoButton(
+                                  child: Text("Wstecz"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ));
+                          });
+                    }),
+              ],
+            ),
           ),
         ],
       ),

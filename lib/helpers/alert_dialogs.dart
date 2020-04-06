@@ -5,6 +5,7 @@ import 'package:forecast/bloc/forecast_event.dart';
 import 'package:forecast/utils/custom_styles.dart';
 import '../forecast_card/forecast_card_list.dart' as globals;
 
+//todo change to ios alert dialogs
 class AlertDialogs {
   displayAddDialog(BuildContext context, ForecastBloc bloc) async {
     TextEditingController _cityController = TextEditingController();
@@ -13,13 +14,14 @@ class AlertDialogs {
         builder: (context) {
           return AlertDialog(
             title: Text('Dodaj nową prognozę!'),
-            content: TextField(
-              textCapitalization: TextCapitalization.words,
-              decoration: const InputDecoration(
-                hintText: "Wpisz miasto",
-                icon: Icon(Icons.location_city),
-              ),
-              controller: _cityController,
+            content: Row(
+              children: <Widget>[
+                Icon(CupertinoIcons.add_circled),
+                CupertinoTextField(placeholder: "Wpisz miasto",
+                  textCapitalization: TextCapitalization.words,
+                  controller: _cityController,
+                ),
+              ],
             ),
             actions: <Widget>[
               new FlatButton(

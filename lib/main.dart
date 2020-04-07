@@ -14,6 +14,8 @@ import 'dart:core';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:forecast/forecast_card/forecast_card_list.dart' as globals;
 
+import 'forecast_card/forecast_card.dart';
+
 void main() => runApp(BlocProvider<ForecastBloc>(
       create: (BuildContext context) => ForecastBloc(),
       child: MyApp(),
@@ -232,49 +234,17 @@ class _MyHomePageState extends State<MyHomePage> {
 //              style: TextStyle(color: CupertinoColors.activeBlue),
 //            )),
 //          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                CupertinoButton(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0, vertical: 10.0),
-                    color: CupertinoColors.activeBlue,
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Text(
-                      "Dodaj nową prognozę",
-                      style: TextStyle(color: CupertinoColors.white),
-                    ),
-                    onPressed: () {
-                      return showCupertinoModalPopup<void>(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return CupertinoActionSheet(
-                                actions: <Widget>[
-                                  CupertinoActionSheetAction(
-                                      child: Text("Dodaj miasto"),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      }),
-                                  CupertinoActionSheetAction(
-                                    child: Text("Dodaj za pomocą lokalizacji"),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                                title: Text("Dodaj nową prognozę"),
-                                cancelButton: CupertinoButton(
-                                  child: Text("Wstecz"),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ));
-                          });
-                    }),
-              ],
-            ),
+          ForecastCard(
+            city: "Gliwice",
+            date: DateTime.now(),
+            description: "Czyste niebo",
+            iconDesc: "Clouds",
+            pressure: 1025,
+            sunrise: 15000,
+            sunset: 23434,
+            temp: 13.0,
+            tempMax: 15.0,
+            tempMin: 12.0,
           ),
         ],
       ),

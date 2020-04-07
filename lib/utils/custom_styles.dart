@@ -8,14 +8,14 @@ class CustomStyles {
   static var circularProgressColor = AlwaysStoppedAnimation<Color>(Colors.white);
 
   static TextStyle cityStyle = TextStyle(
-      color: Colors.grey[600],
-      fontWeight: FontWeight.w400,
+      color: Colors.grey[800],
+      fontWeight: FontWeight.w300,
       fontStyle: FontStyle.normal,
       fontFamily: 'Open Sans',
-      fontSize: 42);
+      fontSize: 24);
 
   static TextStyle dateStyle = TextStyle(
-      color: Colors.grey[600],
+      color: Colors.grey[800],
       fontWeight: FontWeight.w300,
       fontStyle: FontStyle.normal,
       fontFamily: 'Open Sans',
@@ -29,15 +29,15 @@ class CustomStyles {
       fontSize: 24);
 
   static TextStyle tempStyle = TextStyle(
-      color: Colors.grey[600],
-      fontWeight: FontWeight.bold,
+      color: Colors.grey[800],
+      fontWeight: FontWeight.w300,
       fontStyle: FontStyle.normal,
       fontFamily: 'Open Sans',
-      fontSize: 53);
+      fontSize: 60);
 
   static TextStyle tempMinMax = TextStyle(
       color: Colors.grey[800],
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w300,
       fontStyle: FontStyle.normal,
       fontFamily: 'Open Sans',
       fontSize: 24);
@@ -47,21 +47,21 @@ class CustomStyles {
       fontWeight: FontWeight.w300,
       fontStyle: FontStyle.normal,
       fontFamily: 'Open Sans',
-      fontSize: 20);
+      fontSize: 24);
 
   static TextStyle sunStyle = TextStyle(
-      color: Colors.grey[600],
-      fontWeight: FontWeight.w400,
+      color: Colors.grey[800],
+      fontWeight: FontWeight.w300,
       fontStyle: FontStyle.normal,
       fontFamily: 'Open Sans',
       fontSize: 22);
 
   static TextStyle descriptionStyle = TextStyle(
       color: Colors.grey[800],
-      fontWeight: FontWeight.w300,
+      fontWeight: FontWeight.w200,
       fontStyle: FontStyle.normal,
       fontFamily: 'Open Sans',
-      fontSize: 22);
+      fontSize: 44);
 
   static Map<int, Color> color =
   {

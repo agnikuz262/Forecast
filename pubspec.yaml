@@ -37,7 +37,7 @@ dev_dependencies:
   flutter_launcher_icons: 0.7.4
   flutter_test:
     sdk: flutter
-
+  shared_preferences: 0.5.6+3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -71,7 +71,12 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family: San Francisco
+      fonts:
+        - asset: fonts/sf.ttf
+        - asset: fonts/sf_italic.ttf
+          style: italic
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

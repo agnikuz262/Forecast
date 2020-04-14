@@ -94,7 +94,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         return true;
       }
-    } on SocketException catch (e) {
+    } on SocketException catch (_) {
       return false;
     }
   }

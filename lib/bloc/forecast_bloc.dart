@@ -38,7 +38,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       await _checkConnection().then((answer) {
         isConnection = answer;
       });
-      if (isConnection == true) {
+      if (isConnection) {
         try {
           yield ForecastLoading();
           var respond = await fetchData(event.city);

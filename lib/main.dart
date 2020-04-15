@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           primaryContrastingColor: CupertinoColors.activeBlue,
           scaffoldBackgroundColor: CupertinoColors.white,
           textTheme: CupertinoTextThemeData(
-              primaryColor: CupertinoColors.activeBlue,
+              primaryColor: CupertinoColors.black,
               textStyle: TextStyle(fontFamily: 'San Francisco', fontSize: 17))),
       home: MyHomePage(title: 'Pogoda'),
     );

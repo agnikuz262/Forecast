@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forecast/add_city_dialog.dart';
+import 'package:forecast/info_screen.dart';
 import 'package:forecast/utils/custom_styles.dart';
-
 import 'bloc/forecast_bloc.dart';
 import 'bloc/forecast_event.dart';
 import 'bloc/forecast_state.dart';
-import 'forecast_card/forecast_card.dart';
 import 'no_connection_screen.dart';
 
 class FirstScreen extends StatefulWidget {
@@ -114,9 +114,20 @@ class _FirstScreenState extends State<FirstScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
+              Align(
+                alignment: Alignment.topRight,
+                child: GestureDetector(
+                  child: Icon(CupertinoIcons.info),
+                  onTap: _openInfoScreen,
+                ),
+              ),
               Spacer(flex: 1),
               Text("Pogoda dfsd"),
-              Container(child: Text("kdfnkdjnf", style: TextStyle(color: Colors.black),)),
+              Container(
+                  child: Text(
+                "kdfnkdjnf",
+                style: TextStyle(color: Colors.black),
+              )),
               Spacer(
                 flex: 3,
               ),
@@ -179,7 +190,15 @@ class _FirstScreenState extends State<FirstScreen> {
 
   void _openForecastList() {}
 
-  void _openAddCity() {}
+  void _openAddCity() {
+    showCupertinoDialog(
+        context: context, builder: (context) => AddCityDialog());
+  }
 
   void _openAddLocalization() {}
+
+  void _openInfoScreen() {
+    Navigator.of(context)
+        .push(CupertinoPageRoute(builder: (context) => InfoScreen()));
+  }
 }

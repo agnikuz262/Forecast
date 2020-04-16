@@ -32,14 +32,17 @@ class _ForecastListScreenState extends State<ForecastListScreen> {
           );
         }
         if (state is ForecastLoaded) {
+          print("loaded");
           state = ForecastInitial();
           return _buildView();
         }
         if (state is ForecastNotFound) {
+          print("Not found");
           state = ForecastInitial();
           return _buildView();
         }
         if (state is ForecastFailure) {
+          print("failure");
           state = ForecastInitial();
           return NoConnectionScreen();
         } else {

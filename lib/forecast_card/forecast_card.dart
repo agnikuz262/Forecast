@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:animator/animator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forecast/bloc/forecast_bloc.dart';
+import 'package:forecast/forecast_card/step_dot_widget.dart';
 import 'package:forecast/helpers/time_formater.dart';
 import '../helpers/alert_dialogs.dart';
 import '../helpers/uppercase_extension.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../utils/custom_styles.dart';
-
+import 'package:forecast/forecast_card/forecast_card_list.dart' as list;
 class ForecastCard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _ForecastCardState();
@@ -24,6 +25,8 @@ class ForecastCard extends StatefulWidget {
   final int sunrise;
   final int sunset;
   final String description;
+  final int index;
+  final int itemsInList;
 
   ForecastCard({
     @required this.city,
@@ -36,6 +39,8 @@ class ForecastCard extends StatefulWidget {
     this.sunrise,
     this.sunset,
     this.description,
+    this.index,
+    @required this.itemsInList
   });
 }
 
@@ -79,11 +84,6 @@ class _ForecastCardState extends State<ForecastCard>
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: _buildDate(),
         ),
-//        Divider(
-//          color: Color(0xFF01579b),
-//          thickness: 0.2,
-//          height: 0.1,
-//        ),
         Spacer(flex: 3),
         _getIcon(widget.iconDesc),
         Spacer(flex: 2),
@@ -109,7 +109,6 @@ class _ForecastCardState extends State<ForecastCard>
               child: Container(
                 height: 120,
                 color: CupertinoColors.activeBlue,
-
               ),
             ),
             Container(
@@ -193,6 +192,18 @@ class _ForecastCardState extends State<ForecastCard>
             ),
           ],
         ),
+        Spacer(flex: 1),
+        Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+                list.forecastList.length,
+                    (i) => Padding(
+                  padding: const EdgeInsets.only(left: 4),
+                  child: StepDotWidget(
+                    list.forecastList.length - i - 1 == widget.index,
+                    radius: 12,
+                  ),
+                ))),
         Spacer(flex: 2),
       ],
     );

@@ -126,13 +126,15 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
         sunrise: sunrise,
         sunset: sunset,
         description: description,
+        itemsInList: list.forecastList.length + 1,
+        index: list.forecastList.length,
       );
       tempForecastList.add(listElement);
     }
     return tempForecastList;
   }
 
-  void _addForecastToList(var r, ForecastAddCityEvent event)  {
+  void _addForecastToList(var r, ForecastAddCityEvent event) {
     String city = event.city;
     DateTime date = DateTime.now();
     String iconDesc = r.weather[0].main;
@@ -144,7 +146,9 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
     int sunset = r.sys.sunset;
     String description = r.weather[0].description;
 
-      var listElement = ForecastCard(
+    print("inx: ${list.forecastList.length}");
+
+    var listElement = ForecastCard(
       city: city,
       date: date,
       iconDesc: iconDesc,
@@ -155,6 +159,8 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       sunrise: sunrise,
       sunset: sunset,
       description: description,
+      itemsInList: list.forecastList.length + 1,
+      index: list.forecastList.length,
     );
     list.forecastList.insert(0, listElement);
   }

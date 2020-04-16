@@ -3,7 +3,6 @@ import 'package:forecast/model/api/main_data.dart';
 import 'package:forecast/model/api/sys.dart';
 import 'package:forecast/model/api/weather.dart';
 import 'package:forecast/model/api/wind.dart';
-
 import 'clouds.dart';
 
 class WeatherData {

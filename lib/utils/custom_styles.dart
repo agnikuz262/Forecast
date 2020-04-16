@@ -5,11 +5,12 @@ class CustomStyles {
   static Color accentColor = Color(0xFFed4079);
   static Color primaryColor = Color(0xFF01579b);
   static Color lightPrimaryColor = Color(0xFF4f83cc);
-  static var circularProgressColor = AlwaysStoppedAnimation<Color>(Colors.white);
+  static var circularProgressColor =
+      AlwaysStoppedAnimation<Color>(Colors.white);
 
   static TextStyle cityStyle = TextStyle(
       color: Colors.grey[800],
-      fontWeight: FontWeight.w300,
+      fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontFamily: 'Open Sans',
       fontSize: 24);
@@ -34,6 +35,13 @@ class CustomStyles {
       fontStyle: FontStyle.normal,
       fontFamily: 'Open Sans',
       fontSize: 60);
+
+  static TextStyle tempWidgetStyle = TextStyle(
+      color: Colors.grey[800],
+      fontWeight: FontWeight.w300,
+      fontStyle: FontStyle.normal,
+      fontFamily: 'Open Sans',
+      fontSize: 30);
 
   static TextStyle tempMinMax = TextStyle(
       color: Colors.grey[800],
@@ -63,17 +71,16 @@ class CustomStyles {
       fontFamily: 'Open Sans',
       fontSize: 44);
 
-  static Map<int, Color> color =
-  {
-    50:Color.fromRGBO(1, 87, 155, .1),
-    100:Color.fromRGBO(1, 87, 155, .2),
-    200:Color.fromRGBO(1, 87, 155, .3),
-    300:Color.fromRGBO(1, 87, 155, .4),
-    400:Color.fromRGBO(1, 87, 155, .5),
-    500:Color.fromRGBO(1, 87, 155, .6),
-    600:Color.fromRGBO(1, 87, 155, .7),
-    700:Color.fromRGBO(1, 87, 155, .8),
-    800:Color.fromRGBO(1, 87, 155, .9),
-    900:Color.fromRGBO(1, 87, 155, 1),
+  static Map<int, Color> color = {
+    50: Color.fromRGBO(1, 87, 155, .1),
+    100: Color.fromRGBO(1, 87, 155, .2),
+    200: Color.fromRGBO(1, 87, 155, .3),
+    300: Color.fromRGBO(1, 87, 155, .4),
+    400: Color.fromRGBO(1, 87, 155, .5),
+    500: Color.fromRGBO(1, 87, 155, .6),
+    600: Color.fromRGBO(1, 87, 155, .7),
+    700: Color.fromRGBO(1, 87, 155, .8),
+    800: Color.fromRGBO(1, 87, 155, .9),
+    900: Color.fromRGBO(1, 87, 155, 1),
   };
 }

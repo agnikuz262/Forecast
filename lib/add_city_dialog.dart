@@ -59,5 +59,6 @@ class _AddCityDialogState extends State<AddCityDialog> {
     var city = _textController.text;
     print(city);
     _bloc.add(ForecastAddCityEvent(city: city));
+    Navigator.of(context).pop();
   }
 }

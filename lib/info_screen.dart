@@ -6,6 +6,7 @@ class InfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(middle: Text("Informacje o aplikacji"),),
         child: Container(
       width: MediaQuery.of(context).size.width,
       child: SafeArea(

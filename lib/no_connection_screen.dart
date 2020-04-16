@@ -13,7 +13,7 @@ class NoConnectionScreen extends StatelessWidget {
             height: 250.0,
           ),
           SvgPicture.asset('assets/icons/wifi.svg',
-              width: 80.0, height: 80.0, color: Colors.white),
+              width: 80.0, height: 80.0, color: Colors.red),
           SizedBox(height: 10.0),
         ],
       ),

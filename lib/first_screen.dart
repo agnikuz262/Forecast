@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forecast/add_city_dialog.dart';
+import 'package:forecast/default_forecast_widget.dart';
+import 'package:forecast/forecast_list_screen.dart';
 import 'package:forecast/info_screen.dart';
 import 'package:forecast/utils/custom_styles.dart';
 import 'bloc/forecast_bloc.dart';
@@ -122,35 +124,46 @@ class _FirstScreenState extends State<FirstScreen> {
                 ),
               ),
               Spacer(flex: 1),
-              Text("Pogoda dfsd"),
-              Container(
-                  child: Text(
-                "kdfnkdjnf",
-                style: TextStyle(color: Colors.black),
-              )),
+              DefaultForecastWidget(),
               Spacer(
                 flex: 3,
               ),
               SizedBox(
                 width: double.infinity,
-                child: CupertinoButton(
-                  borderRadius: BorderRadius.circular(6.0),
-                  color: CupertinoColors.activeBlue,
-                  onPressed: _openAddNew,
-                  child: Text("Nowa prognoza",
-                      style: TextStyle(color: CupertinoColors.white)),
+                child: Container(
+                  decoration: BoxDecoration(boxShadow: [
+                    BoxShadow(
+                        offset: Offset(1.0, 1.0),
+                        blurRadius: 5.0,
+                        color: Colors.grey)
+                  ]),
+                  child: CupertinoButton(
+                    borderRadius: BorderRadius.circular(6.0),
+                    color: CupertinoColors.activeBlue,
+                    onPressed: _openAddNew,
+                    child: Text("Nowa prognoza",
+                        style: TextStyle(color: CupertinoColors.white)),
+                  ),
                 ),
               ),
               SizedBox(height: 10.0),
               SizedBox(
                 width: double.infinity,
-                child: CupertinoButton(
-                  borderRadius: BorderRadius.circular(6.0),
-                  color: CupertinoColors.activeBlue,
-                  onPressed: _openForecastList,
-                  child: Text(
-                    "Wszystkie prognozy",
-                    style: TextStyle(color: CupertinoColors.white),
+                child: Container(
+                  decoration: BoxDecoration(boxShadow: [
+                    BoxShadow(
+                        offset: Offset(1.0, 1.0),
+                        blurRadius: 5.0,
+                        color: Colors.grey)
+                  ]),
+                  child: CupertinoButton(
+                    borderRadius: BorderRadius.circular(6.0),
+                    color: CupertinoColors.activeBlue,
+                    onPressed: _openForecastList,
+                    child: Text(
+                      "Wszystkie prognozy",
+                      style: TextStyle(color: CupertinoColors.white),
+                    ),
                   ),
                 ),
               ),
@@ -188,7 +201,10 @@ class _FirstScreenState extends State<FirstScreen> {
             ));
   }
 
-  void _openForecastList() {}
+  void _openForecastList() {
+    Navigator.of(context)
+        .push(CupertinoPageRoute(builder: (context) => ForecastListScreen()));
+  }
 
   void _openAddCity() {
     showCupertinoDialog(

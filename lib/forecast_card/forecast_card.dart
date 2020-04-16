@@ -79,13 +79,15 @@ class _ForecastCardState extends State<ForecastCard>
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: _buildDate(),
         ),
-        Divider(
-          color: Color(0xFF01579b),
-          thickness: 0.2,
-          height: 0.1,
-        ),
+//        Divider(
+//          color: Color(0xFF01579b),
+//          thickness: 0.2,
+//          height: 0.1,
+//        ),
         Spacer(flex: 3),
         _getIcon(widget.iconDesc),
+        Spacer(flex: 2),
+        Center(child: Text("${widget.city}", style: CustomStyles.cityStyle)),
         Spacer(flex: 1),
         Container(
           width: MediaQuery.of(context).size.width,
@@ -98,8 +100,6 @@ class _ForecastCardState extends State<ForecastCard>
             textAlign: TextAlign.center,
           ),
         ),
-        Spacer(flex: 2),
-        Center(child: Text("${widget.city}", style: CustomStyles.cityStyle)),
         Spacer(flex: 2),
         Stack(
           alignment: Alignment.center,
@@ -212,9 +212,11 @@ class _ForecastCardState extends State<ForecastCard>
             onPressed: () {
               AlertDialogs().displayDeleteDialog(context, widget, bloc);
             },
-            child: Icon(
-              CupertinoIcons.delete_simple,
-              color: CupertinoColors.activeBlue,
+            child: Opacity(opacity: 0.4,
+              child: Icon(
+                CupertinoIcons.delete_simple,
+                color: CupertinoColors.activeBlue,
+              ),
             ),
           ),
         )

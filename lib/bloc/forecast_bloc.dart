@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:forecast/bloc/forecast_event.dart';
 import 'package:forecast/bloc/forecast_state.dart';
 import 'package:forecast/model/api/weather_data.dart';
-import 'package:forecast/forecast_card/forecast_card_list.dart' as globals;
+import 'package:forecast/forecast_card/forecast_card_list.dart' as list;
 import '../forecast_card/forecast_card.dart';
 
 Future fetchData(String city) async {
@@ -33,6 +33,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
   @override
   Stream<ForecastState> mapEventToState(ForecastEvent event) async* {
     if (event is ForecastAddCityEvent) {
+      print("in bloc");
       yield ForecastLoading();
       bool isConnection = false;
       await _checkConnection().then((answer) {
@@ -40,7 +41,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       });
       if (isConnection) {
         try {
-          yield ForecastLoading();
+//          yield ForecastLoading();
           var respond = await fetchData(event.city);
           if (respond is WeatherData) {
             _addForecastToList(respond, event);
@@ -57,7 +58,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       }
     }
     if (event is ForecastCardDeleted) {
-      globals.forecastList.removeAt(event.ind);
+      list.forecastList.removeAt(event.ind);
       yield ForecastLoading();
       yield ForecastDeleted();
     }
@@ -67,8 +68,8 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       await _checkConnection().then((answer) {
         isConnection = answer;
       });
-      if (isConnection == true) {
-        if (globals.forecastList.isEmpty) {
+      if (isConnection) {
+        if (list.forecastList.isEmpty) {
           yield ForecastLoaded();
         } else {
           try {
@@ -76,8 +77,8 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
             await _refreshForecastList().then((list) {
               tempForecastList = list;
             });
-            globals.forecastList.clear();
-            globals.forecastList = tempForecastList;
+            list.forecastList.clear();
+            list.forecastList = tempForecastList;
             yield ForecastLoaded();
           } catch (e) {
             yield ForecastFailure(error: e);
@@ -101,9 +102,9 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
 
   Future _refreshForecastList() async {
     List<ForecastCard> tempForecastList = [];
-    for (int i = 0; i < globals.forecastList.length; i++) {
-      var r = await fetchData(globals.forecastList[i].city);
-      String city = globals.forecastList[i].city;
+    for (int i = 0; i < list.forecastList.length; i++) {
+      var r = await fetchData(list.forecastList[i].city);
+      String city = list.forecastList[i].city;
       DateTime date = DateTime.now();
       String iconDesc = r.weather[0].main;
       double temp = r.main.temp;
@@ -155,6 +156,6 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       sunset: sunset,
       description: description,
     );
-    globals.forecastList.insert(0, listElement);
+    list.forecastList.insert(0, listElement);
   }
 }

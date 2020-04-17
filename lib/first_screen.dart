@@ -8,6 +8,7 @@ import 'package:forecast/default_forecast_widget.dart';
 import 'package:forecast/forecast_list_screen.dart';
 import 'package:forecast/info_screen.dart';
 import 'package:forecast/utils/custom_styles.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'bloc/forecast_bloc.dart';
 import 'bloc/forecast_event.dart';
 import 'bloc/forecast_state.dart';
@@ -211,7 +212,26 @@ class _FirstScreenState extends State<FirstScreen> {
         context: context, builder: (context) => AddCityDialog());
   }
 
-  void _openAddLocalization() {}
+  void _openAddLocalization() async {
+    PermissionStatus permissionStatus;
+    try {
+      permissionStatus = await Permission.location.status;
+      if (permissionStatus.isUndetermined) {
+        permissionStatus = await Permission.location.request();
+      }
+      if (permissionStatus.isDenied) {
+        print("denied");
+      } else if (permissionStatus.isPermanentlyDenied) {
+        print("permamently denied");
+      } else if (permissionStatus.isRestricted) {
+        print("restricted");
+      } else if (permissionStatus.isGranted) {
+        print("granted");
+      }
+    } catch (e) {
+      print("error $e");
+    }
+  }
 
   void _openInfoScreen() {
     Navigator.of(context)

@@ -19,6 +19,18 @@ class ForecastAddCityEvent extends ForecastEvent {
   String toString() => 'ForecastAddCityEvent { city: $city }';
 }
 
+class ForecastAddLocalizationEvent extends ForecastEvent {
+  final lat;
+  final long;
+  ForecastAddLocalizationEvent({@required this.lat, @required this.long});
+
+  @override
+  List<Object> get props => [lat, long];
+
+  @override
+  String toString() => 'ForecastAddLocalizationEvent { lat: $lat, long: $long }';
+}
+
 class ForecastCardDeleted extends ForecastEvent {
   final ind;
   ForecastCardDeleted({@required this.ind});

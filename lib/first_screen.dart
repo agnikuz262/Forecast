@@ -8,6 +8,7 @@ import 'package:forecast/default_forecast_widget.dart';
 import 'package:forecast/forecast_list_screen.dart';
 import 'package:forecast/info_screen.dart';
 import 'package:forecast/utils/custom_styles.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'bloc/forecast_bloc.dart';
 import 'bloc/forecast_event.dart';
@@ -227,6 +228,17 @@ class _FirstScreenState extends State<FirstScreen> {
         print("restricted");
       } else if (permissionStatus.isGranted) {
         print("granted");
+        try {
+          var position = await Geolocator()
+              .getCurrentPosition()
+              .timeout(Duration(seconds: 4));
+          print("lat: ${position.latitude}, long: ${position.longitude.toString()}");
+          bloc.add(ForecastAddLocalizationEvent(
+              lat: position.latitude.toString(),
+              long: position.longitude.toString()));
+        } catch (e) {
+          print("geolocator error $e");
+        }
       }
     } catch (e) {
       print("error $e");

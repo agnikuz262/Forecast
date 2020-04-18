@@ -8,10 +8,26 @@ import 'package:forecast/model/api/weather_data.dart';
 import 'package:forecast/forecast_card/forecast_card_list.dart' as list;
 import '../forecast_card/forecast_card.dart';
 
-Future fetchData(String city) async {
+Future fetchCityData(String city) async {
   final String apiKey = "b6dc63335a86e575b1eab4dc075c87b1";
   final response = await http.get(
       "https://api.openweathermap.org/data/2.5/weather?q=$city&units=metric&appid=$apiKey&lang=pl");
+
+  if (response.statusCode == 200) {
+    try {
+      return WeatherData.fromJson(json.decode(response.body));
+    } catch (e) {
+      return e;
+    }
+  } else {
+    return 'Status code != 200';
+  }
+}
+
+Future fetchLocalizationData(int lat, int long) async {
+  final String apiKey = "b6dc63335a86e575b1eab4dc075c87b1";
+  final response = await http.get(
+      "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$long&units=metric&appid=$apiKey&lang=pl");
 
   if (response.statusCode == 200) {
     try {
@@ -25,7 +41,7 @@ Future fetchData(String city) async {
 }
 
 class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
-  bool isConnection = true;
+  bool isConnection = false;
 
   @override
   ForecastState get initialState => ForecastInitial();
@@ -33,18 +49,37 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
   @override
   Stream<ForecastState> mapEventToState(ForecastEvent event) async* {
     if (event is ForecastAddCityEvent) {
-      print("in bloc");
       yield ForecastLoading();
-      bool isConnection = false;
       await _checkConnection().then((answer) {
         isConnection = answer;
       });
       if (isConnection) {
         try {
-//          yield ForecastLoading();
-          var respond = await fetchData(event.city);
+          var respond = await fetchCityData(event.city);
           if (respond is WeatherData) {
             _addForecastToList(respond, event);
+            yield ForecastLoaded();
+          } else {
+            yield ForecastNotFound();
+          }
+        } catch (e) {
+          yield ForecastFailure(error: e);
+          throw e;
+        }
+      } else {
+        yield ForecastFailure(error: "No connection");
+      }
+    }
+    if(event is ForecastAddLocalizationEvent) {
+      yield ForecastLoading();
+      await _checkConnection().then((answer) {
+        isConnection = answer;
+      });
+      if (isConnection) {
+        try {
+          var respond = await fetchLocalizationData(event.lat.toInt(), event.long.toInt());
+          if (respond is WeatherData) {
+         //   _addForecastToList(respond, event);
             yield ForecastLoaded();
           } else {
             yield ForecastNotFound();
@@ -103,7 +138,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
   Future _refreshForecastList() async {
     List<ForecastCard> tempForecastList = [];
     for (int i = 0; i < list.forecastList.length; i++) {
-      var r = await fetchData(list.forecastList[i].city);
+      var r = await fetchCityData(list.forecastList[i].city);
       String city = list.forecastList[i].city;
       DateTime date = DateTime.now();
       String iconDesc = r.weather[0].main;

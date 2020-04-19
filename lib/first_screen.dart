@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forecast/add_city_dialog.dart';
+import 'package:forecast/default_forecast_row.dart';
 import 'package:forecast/forecast_list_screen.dart';
 import 'package:forecast/info_screen.dart';
 import 'package:geolocator/geolocator.dart';
@@ -67,7 +68,17 @@ class _FirstScreenState extends State<FirstScreen> {
             state = ForecastInitial();
             return _buildView(context);
           }
-          if(state is ForecastNoGps) {
+          if (state is ForecastNoGps) {
+            isConnection = true;
+            state = ForecastInitial();
+            return _buildView(context);
+          }
+          if (state is LocationPermissionDenied) {
+            isConnection = true;
+            state = ForecastInitial();
+            return _buildView(context);
+          }
+          if (state is LocationPermissionRestricted) {
             isConnection = true;
             state = ForecastInitial();
             return _buildView(context);
@@ -116,7 +127,7 @@ class _FirstScreenState extends State<FirstScreen> {
                 content: Text(
                     "Prognoza dla tego miejsca już istnieje na Twojej liście.")));
           }
-          if(state is ForecastNoGps) {
+          if (state is ForecastNoGps) {
             print("no gps");
             state = ForecastInitial();
             Scaffold.of(context).showSnackBar(SnackBar(
@@ -134,13 +145,27 @@ class _FirstScreenState extends State<FirstScreen> {
                     "Nie można załadować prognozy. Sprawdź połączenie z Internetem.")));
             state = ForecastInitial();
           }
-        if (state is ForecastNotFound) {
-          print("not found");
-          state = ForecastInitial();
-          Scaffold.of(context).showSnackBar(SnackBar(
-              backgroundColor: CupertinoColors.activeBlue,
-              content: Text("Nie znaleziono podanego miasta.")));
-        }
+          if (state is ForecastNotFound) {
+            print("not found");
+            state = ForecastInitial();
+            Scaffold.of(context).showSnackBar(SnackBar(
+                backgroundColor: CupertinoColors.activeBlue,
+                content: Text("Nie znaleziono podanego miasta.")));
+          }
+          if (state is LocationPermissionDenied) {
+            state = ForecastInitial();
+            Scaffold.of(context).showSnackBar(SnackBar(
+                backgroundColor: CupertinoColors.activeBlue,
+                content: Text(
+                    "Odmówiono dostępu do lokalizacji. Możesz to zmienić w ustawieniach urządzenia.")));
+          }
+          if (state is LocationPermissionRestricted) {
+            state = ForecastInitial();
+            Scaffold.of(context).showSnackBar(SnackBar(
+                backgroundColor: CupertinoColors.activeBlue,
+                content: Text(
+                    "Obowiązują restrykcje. Możesz to zmienić w ustawieniach urządzenia.")));
+          }
         },
       ),
     );
@@ -150,69 +175,73 @@ class _FirstScreenState extends State<FirstScreen> {
     return SafeArea(
       // bottom: true,
       child: CupertinoPageScaffold(
-          child: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Align(
-                alignment: Alignment.topRight,
-                child: GestureDetector(
-                  child: Icon(CupertinoIcons.info),
-                  onTap: _openInfoScreen,
-                ),
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: GestureDetector(
+                child: Icon(CupertinoIcons.info),
+                onTap: _openInfoScreen,
               ),
-              //Spacer(flex: 1),
-              //DefaultForecastWidget(),
-              Spacer(
-                flex: 3,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: Container(
-                  decoration: BoxDecoration(boxShadow: [
-                    BoxShadow(
-                        offset: Offset(1.0, 1.0),
-                        blurRadius: 5.0,
-                        color: Colors.grey)
-                  ]),
-                  child: CupertinoButton(
-                    borderRadius: BorderRadius.circular(6.0),
-                    color: CupertinoColors.activeBlue,
-                    onPressed: _openAddNew,
-                    child: Text("Nowa prognoza",
-                        style: TextStyle(color: CupertinoColors.white)),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10.0),
-              SizedBox(
-                width: double.infinity,
-                child: Container(
-                  decoration: BoxDecoration(boxShadow: [
-                    BoxShadow(
-                        offset: Offset(1.0, 1.0),
-                        blurRadius: 5.0,
-                        color: Colors.grey)
-                  ]),
-                  child: CupertinoButton(
-                    borderRadius: BorderRadius.circular(6.0),
-                    color: CupertinoColors.activeBlue,
-                    onPressed: _openForecastList,
-                    child: Text(
-                      "Wszystkie prognozy",
-                      style: TextStyle(color: CupertinoColors.white),
+            ),
+          ),
+          Spacer(flex: 1),
+          DefaultForecastRow(),
+          Spacer(
+            flex: 3,
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 5/6,
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                          offset: Offset(1.0, 1.0),
+                          blurRadius: 5.0,
+                          color: Colors.grey)
+                    ]),
+                    child: CupertinoButton(
+                      borderRadius: BorderRadius.circular(6.0),
+                      color: CupertinoColors.activeBlue,
+                      onPressed: _openAddNew,
+                      child: Text("Nowa prognoza",
+                          style: TextStyle(color: CupertinoColors.white)),
                     ),
                   ),
                 ),
-              ),
-              Spacer(flex: 1),
-            ],
+                SizedBox(height: 10.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                          offset: Offset(1.0, 1.0),
+                          blurRadius: 5.0,
+                          color: Colors.grey)
+                    ]),
+                    child: CupertinoButton(
+                      borderRadius: BorderRadius.circular(6.0),
+                      color: CupertinoColors.activeBlue,
+                      onPressed: _openForecastList,
+                      child: Text(
+                        "Wszystkie prognozy",
+                        style: TextStyle(color: CupertinoColors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+          Spacer(flex: 1),
+        ],
       )),
     );
   }

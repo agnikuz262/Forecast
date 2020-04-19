@@ -65,7 +65,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
             yield ForecastNotFound();
           }
         } catch (e) {
-          yield ForecastFailure(error: e);
+          yield ForecastFailure(error: e.toString());
           throw e;
         }
       } else {
@@ -74,7 +74,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
     }
     if (event is ForecastAddLocalizationEvent) {
       yield ForecastLoading();
-      var position;
+      Position position;
       PermissionStatus permissionStatus;
       try {
         permissionStatus = await Permission.location.status;
@@ -83,10 +83,16 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
         }
         if (permissionStatus.isDenied) {
           print("denied");
+          yield LocationPermissionDenied();
+          return;
         } else if (permissionStatus.isPermanentlyDenied) {
           print("permamently denied");
+          yield LocationPermissionDenied();
+          return;
         } else if (permissionStatus.isRestricted) {
           print("restricted");
+          yield LocationPermissionRestricted();
+          return;
         } else if (permissionStatus.isGranted) {
           print("granted");
           try {
@@ -99,7 +105,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
             if (isConnection) {
               try {
                 var respond =
-                    await fetchLocalizationData(position.lat, position.long);
+                    await fetchLocalizationData(position.latitude, position.longitude);
                 if (respond is WeatherData) {
                   bool isNew = _addLocalizationForecastToList(respond, event);
                   if (isNew) {
@@ -114,7 +120,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
                   return;
                 }
               } catch (e) {
-                yield ForecastFailure(error: e);
+                yield ForecastFailure(error: e.toString());
                 throw e;
               }
             } else {
@@ -122,14 +128,14 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
               return;
             }
           } catch (e) {
-            print("geolocator error $e");
+            print("geolocator error ${e.toString()}");
             yield ForecastNoGps();
             return;
           }
         }
       } catch (e) {
-        print("error $e");
-        yield ForecastFailure(error: e);
+        print("error ${e.toString()}");
+        yield ForecastFailure(error: e.toString());
         return;
       }
     }
@@ -157,7 +163,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
             list.forecastList = tempForecastList;
             yield ForecastLoaded();
           } catch (e) {
-            yield ForecastFailure(error: e);
+            yield ForecastFailure(error: e.toString());
           }
         }
       } else

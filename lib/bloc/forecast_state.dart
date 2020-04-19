@@ -22,6 +22,10 @@ class ForecastAlreadySaved extends ForecastState {}
 
 class ForecastNoGps extends ForecastState {}
 
+class LocationPermissionDenied extends ForecastState {}
+
+class LocationPermissionRestricted extends ForecastState {}
+
 class ForecastFailure extends ForecastState {
   final String error;
   const ForecastFailure({@required this.error});

@@ -1,13 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forecast/add_city_dialog.dart';
-import 'package:forecast/default_forecast_widget.dart';
 import 'package:forecast/forecast_list_screen.dart';
 import 'package:forecast/info_screen.dart';
-import 'package:forecast/utils/custom_styles.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'bloc/forecast_bloc.dart';
@@ -36,77 +33,120 @@ class _FirstScreenState extends State<FirstScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ForecastBloc, ForecastState>(
-      builder: (context, state) {
-        if (state is ForecastInitial) {
-          return Center();
-        }
-        if (state is ForecastLoading) {
-          return Center(
-              child: CupertinoActivityIndicator(
-            animating: true,
-            radius: 15.0,
-          ));
-        }
-        if (state is ForecastLoaded) {
-          isConnection = true;
-          _refreshCompleter?.complete();
-          _refreshCompleter = Completer();
-          state = ForecastInitial();
-          return _buildView();
-        }
-        if (state is ForecastFailure) {
-          isConnection = false;
-          state = ForecastInitial();
-          return NoConnectionScreen();
-        }
-        if (state is ForecastDeleted) {
-          state = ForecastInitial();
-          return _buildView();
-        }
-        if (state is ForecastNotFound) {
-          state = ForecastInitial();
-          return _buildView();
-        } else
-          return Center(
-            child: Text(
-              "Coś poszło nie tak",
-              style: TextStyle(color: Colors.red),
-            ),
-          );
-      },
-      listener: (BuildContext context, ForecastState state) {
-        if (state is ForecastDeleted) {
-          setState(() {});
-          state = ForecastInitial();
-        }
-        if (state is ForecastLoaded) {
-          setState(() {
+    return Scaffold(
+      body: BlocConsumer<ForecastBloc, ForecastState>(
+        builder: (context, state) {
+          if (state is ForecastInitial) {
+            return Center();
+          }
+          if (state is ForecastLoading) {
+            return Center(
+                child: CupertinoActivityIndicator(
+              animating: true,
+              radius: 20.0,
+            ));
+          }
+          if (state is ForecastLoaded) {
             isConnection = true;
-          });
-          state = ForecastInitial();
-        }
-        if (state is ForecastFailure) {
-          setState(() {
+            _refreshCompleter?.complete();
+            _refreshCompleter = Completer();
+            state = ForecastInitial();
+            return _buildView(context);
+          }
+          if (state is ForecastAlreadySaved) {
+            isConnection = true;
+            state = ForecastInitial();
+            return _buildView(context);
+          }
+          if (state is ForecastFailure) {
             isConnection = false;
-          });
-          Scaffold.of(context).showSnackBar(SnackBar(
-              backgroundColor: CustomStyles.accentColor,
-              content: Text(
-                  "Nie można załadować prognozy. Sprawdź połączenie z Internetem.")));
+            state = ForecastInitial();
+            return NoConnectionScreen();
+          }
+          if (state is ForecastDeleted) {
+            state = ForecastInitial();
+            return _buildView(context);
+          }
+          if(state is ForecastNoGps) {
+            isConnection = true;
+            state = ForecastInitial();
+            return _buildView(context);
+          }
+          if (state is ForecastNotFound) {
+            state = ForecastInitial();
+            return _buildView(context);
+          } else
+            return Center(
+              child: Text(
+                "Coś poszło nie tak",
+                style: TextStyle(color: Colors.red),
+              ),
+            );
+        },
+        listener: (BuildContext context, ForecastState state) {
+          if (state is ForecastDeleted) {
+            setState(() {});
+            state = ForecastInitial();
+          }
+          if (state is ForecastInitial) {
+            Center();
+          }
+          if (state is ForecastLoading) {
+            Center(
+                child: CupertinoActivityIndicator(
+              animating: true,
+              radius: 20.0,
+            ));
+          }
+          if (state is ForecastLoaded) {
+            setState(() {
+              isConnection = true;
+            });
+            state = ForecastInitial();
+            Scaffold.of(context).showSnackBar(SnackBar(
+                backgroundColor: CupertinoColors.activeBlue,
+                content: Text(
+                    "Pomyślnie dodano prognozę. By ją zobaczyć, naciśnij przycisk \"Wszystkie prognozy\".")));
+          }
+          if (state is ForecastAlreadySaved) {
+            setState(() {});
+            state = ForecastInitial();
+            Scaffold.of(context).showSnackBar(SnackBar(
+                backgroundColor: CupertinoColors.activeBlue,
+                content: Text(
+                    "Prognoza dla tego miejsca już istnieje na Twojej liście.")));
+          }
+          if(state is ForecastNoGps) {
+            print("no gps");
+            state = ForecastInitial();
+            Scaffold.of(context).showSnackBar(SnackBar(
+                backgroundColor: CupertinoColors.activeBlue,
+                content: Text(
+                    "Nie można pobrać lokalizacji. Sprawdź, czy GPS jest włączony.")));
+          }
+          if (state is ForecastFailure) {
+            setState(() {
+              isConnection = false;
+            });
+            Scaffold.of(context).showSnackBar(SnackBar(
+                backgroundColor: CupertinoColors.activeBlue,
+                content: Text(
+                    "Nie można załadować prognozy. Sprawdź połączenie z Internetem.")));
+            state = ForecastInitial();
+          }
+        if (state is ForecastNotFound) {
+          print("not found");
           state = ForecastInitial();
+          Scaffold.of(context).showSnackBar(SnackBar(
+              backgroundColor: CupertinoColors.activeBlue,
+              content: Text("Nie znaleziono podanego miasta.")));
         }
-//        if (state is ForecastNotFound) {
-//          Scaffold.of(context).showSnackBar(SnackBar(
-//              backgroundColor: CustomStyles.accentColor,
-//              content: Text("Nie znaleziono podanego miasta.")));
-//          state = ForecastInitial();
-//        }
-      },
+        },
+      ),
     );
   }
 
-  Widget _buildView() {
+  Widget _buildView(BuildContext context) {
     return SafeArea(
       // bottom: true,
       child: CupertinoPageScaffold(
@@ -125,8 +165,8 @@ class _FirstScreenState extends State<FirstScreen> {
                   onTap: _openInfoScreen,
                 ),
               ),
-              Spacer(flex: 1),
-              DefaultForecastWidget(),
+              //Spacer(flex: 1),
+              //DefaultForecastWidget(),
               Spacer(
                 flex: 3,
               ),
@@ -197,7 +237,7 @@ class _FirstScreenState extends State<FirstScreen> {
                 ),
                 CupertinoActionSheetAction(
                   child: Text("Lokalizacja"),
-                  onPressed: _openAddLocalization,
+                  onPressed: () => _openAddLocalization(context),
                 ),
               ],
             ));
@@ -209,40 +249,14 @@ class _FirstScreenState extends State<FirstScreen> {
   }
 
   void _openAddCity() {
+    Navigator.of(context).pop();
     showCupertinoDialog(
         context: context, builder: (context) => AddCityDialog());
   }
 
-  void _openAddLocalization() async {
-    PermissionStatus permissionStatus;
-    try {
-      permissionStatus = await Permission.location.status;
-      if (permissionStatus.isUndetermined) {
-        permissionStatus = await Permission.location.request();
-      }
-      if (permissionStatus.isDenied) {
-        print("denied");
-      } else if (permissionStatus.isPermanentlyDenied) {
-        print("permamently denied");
-      } else if (permissionStatus.isRestricted) {
-        print("restricted");
-      } else if (permissionStatus.isGranted) {
-        print("granted");
-        try {
-          var position = await Geolocator()
-              .getCurrentPosition()
-              .timeout(Duration(seconds: 4));
-          print("lat: ${position.latitude}, long: ${position.longitude.toString()}");
-          bloc.add(ForecastAddLocalizationEvent(
-              lat: position.latitude.toString(),
-              long: position.longitude.toString()));
-        } catch (e) {
-          print("geolocator error $e");
-        }
-      }
-    } catch (e) {
-      print("error $e");
-    }
+  void _openAddLocalization(BuildContext context) async {
+    Navigator.of(context).pop();
+    bloc.add(ForecastAddLocalizationEvent());
   }
 
   void _openInfoScreen() {

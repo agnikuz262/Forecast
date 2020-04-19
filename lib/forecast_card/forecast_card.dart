@@ -26,7 +26,6 @@ class ForecastCard extends StatefulWidget {
   final int sunset;
   final String description;
   final int index;
-  final int itemsInList;
 
   ForecastCard({
     @required this.city,
@@ -39,8 +38,7 @@ class ForecastCard extends StatefulWidget {
     this.sunrise,
     this.sunset,
     this.description,
-    this.index,
-    @required this.itemsInList
+    this.index
   });
 }
 
@@ -87,8 +85,6 @@ class _ForecastCardState extends State<ForecastCard>
         Spacer(flex: 3),
         _getIcon(widget.iconDesc),
         Spacer(flex: 2),
-        Center(child: Text("${widget.city}", style: CustomStyles.cityStyle)),
-        Spacer(flex: 1),
         Container(
           width: MediaQuery.of(context).size.width,
           alignment: Alignment.center,
@@ -101,6 +97,8 @@ class _ForecastCardState extends State<ForecastCard>
           ),
         ),
         Spacer(flex: 2),
+        Center(child: Text("${widget.city}", style: CustomStyles.cityStyle)),
+        Spacer(flex: 3),
         Stack(
           alignment: Alignment.center,
           children: <Widget>[

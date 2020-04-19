@@ -1,7 +1,7 @@
 class Sys {
   int type;
   int id;
-  double message;
+  String message;
   String country;
   int sunrise;
   int sunset;
@@ -17,7 +17,7 @@ class Sys {
   Sys.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     id = json['id'];
-    message = json['message'];
+    message = json['message']; //todo
     country = json['country'];
     sunrise = json['sunrise'];
     sunset = json['sunset'];

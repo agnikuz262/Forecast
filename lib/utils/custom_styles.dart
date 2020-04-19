@@ -10,7 +10,7 @@ class CustomStyles {
 
   static TextStyle cityStyle = TextStyle(
       color: Colors.grey[800],
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w300,
       fontStyle: FontStyle.normal,
       fontFamily: 'Open Sans',
       fontSize: 24);
@@ -69,7 +69,7 @@ class CustomStyles {
       fontWeight: FontWeight.w200,
       fontStyle: FontStyle.normal,
       fontFamily: 'Open Sans',
-      fontSize: 44);
+      fontSize: 40);
 
   static Map<int, Color> color = {
     50: Color.fromRGBO(1, 87, 155, .1),

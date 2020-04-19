@@ -42,7 +42,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ListTile(
                 title: Text("Zmień domyślną prognozę pogody"),
                 onTap: _openChangeDefaultForecastWidget,
-              )
+              ),
+              Divider(thickness: 0.2, color: CupertinoColors.systemGrey,),
+              ListTile(
+                title: Text("Zobacz listę zapisanych prognoz"),
+                onTap: _openChangeDefaultForecastWidget,
+              ),
+              Divider(thickness: 0.2, color: CupertinoColors.systemGrey,),
             ],
           ),
         ),

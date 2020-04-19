@@ -84,42 +84,4 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: CupertinoColors.white,
     );
   }
-
-//  AppBar _buildAppBar() {
-//    return BottomNa(
-//      elevation: 4.0,
-//      title: Row(
-//        children: <Widget>[
-//          Stack(
-//            alignment: Alignment.center,
-//            children: <Widget>[
-//              Container(
-//                  decoration: new BoxDecoration(
-//                      color: Colors.white70,
-//                      borderRadius: BorderRadius.circular(50.0)),
-//                  width: 37.0,
-//                  height: 37.0),
-//              SvgPicture.asset('assets/icons/umbrella1.svg',
-//                  height: 30, width: 30)
-//            ],
-//          ),
-//          SizedBox(width: 10.0),
-//          Text(widget.title),
-//          Spacer(),
-//          Container(
-//            width: 45.0,
-//            child: FlatButton(
-//              onPressed: () {
-//                bloc.add(RefreshForecast());
-//              },
-//              child: Icon(
-//                CupertinoIcons.refresh
-//                color: Colors.white,
-//              ),
-//            ),
-//          )
-//        ],
-//      ),
-//    );
-//  }
 }

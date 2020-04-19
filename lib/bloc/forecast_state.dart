@@ -18,6 +18,10 @@ class ForecastDeleted extends ForecastState {}
 
 class ForecastLoaded extends ForecastState {}
 
+class ForecastAlreadySaved extends ForecastState {}
+
+class ForecastNoGps extends ForecastState {}
+
 class ForecastFailure extends ForecastState {
   final String error;
   const ForecastFailure({@required this.error});

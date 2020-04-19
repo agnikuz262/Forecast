@@ -22,7 +22,8 @@ class _ForecastListScreenState extends State<ForecastListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ForecastBloc, ForecastState>(
+    return Scaffold(
+        body: BlocConsumer<ForecastBloc, ForecastState>(
       builder: (context, state) {
         if (state is ForecastLoading) {
           state = ForecastInitial();
@@ -33,11 +34,6 @@ class _ForecastListScreenState extends State<ForecastListScreen> {
         }
         if (state is ForecastLoaded) {
           print("loaded");
-          state = ForecastInitial();
-          return _buildView();
-        }
-        if (state is ForecastNotFound) {
-          print("Not found");
           state = ForecastInitial();
           return _buildView();
         }
@@ -56,14 +52,20 @@ class _ForecastListScreenState extends State<ForecastListScreen> {
       },
       listener: (context, state) {},
       bloc: _bloc,
-    );
+    ));
   }
 
   Widget _buildView() {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text("Twoje prognozy", style: TextStyle(fontWeight: FontWeight.w400),),
-          trailing: Icon(CupertinoIcons.refresh, color: CupertinoColors.black,),
+          middle: Text(
+            "Twoje prognozy",
+            style: TextStyle(fontWeight: FontWeight.w400),
+          ),
+          trailing: Icon(
+            CupertinoIcons.refresh,
+            color: CupertinoColors.activeBlue,
+          ),
         ),
         child: SafeArea(
             child: PageView(

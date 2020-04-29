@@ -241,6 +241,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       index: list.forecastList.length,
     );
     list.forecastList.insert(0, listElement);
+    list.defaultForecast = listElement;
   }
 
   bool _addLocalizationForecastToList(

@@ -17,7 +17,7 @@ class _DefaultForecastWidgetState extends State<DefaultForecastWidget> {
   @override
   void initState() {
     super.initState();
-    defaultCard = list.forecastList[list.forecastList.length];
+    defaultCard = list.defaultForecast;
   }
 
   @override

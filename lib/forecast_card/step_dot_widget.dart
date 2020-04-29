@@ -6,7 +6,7 @@ class StepDotWidget extends StatelessWidget {
   final Color color;
   final double radius;
 
-  const StepDotWidget(this.selected, {Key key, this.color, this.radius = 16.0})
+  const StepDotWidget(this.selected, {Key key, this.color, this.radius = 12.0})
       : super(key: key);
 
   @override
@@ -16,7 +16,6 @@ class StepDotWidget extends StatelessWidget {
         width: radius,
         height: radius,
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.white, width: 1.5),
             color: color == null
                 ? selected
                     ? CupertinoColors.activeBlue

@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forecast/bloc/forecast_bloc.dart';
 import 'package:forecast/forecast_card/step_dot_widget.dart';
 import 'package:forecast/helpers/time_formater.dart';
-import '../helpers/alert_dialogs.dart';
 import '../helpers/uppercase_extension.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -199,7 +198,7 @@ class _ForecastCardState extends State<ForecastCard>
                   padding: const EdgeInsets.only(left: 4),
                   child: StepDotWidget(
                     list.forecastList.length - i - 1 == widget.index,
-                    radius: 12,
+                    radius: 8,
                   ),
                 ))),
         Spacer(flex: 2),
@@ -219,7 +218,6 @@ class _ForecastCardState extends State<ForecastCard>
           width: 40.0,
           child: FlatButton(
             onPressed: () {
-              AlertDialogs().displayDeleteDialog(context, widget, bloc);
             },
             child: Opacity(opacity: 0.4,
               child: Icon(

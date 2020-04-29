@@ -58,6 +58,7 @@ class _ForecastListScreenState extends State<ForecastListScreen> {
   Widget _buildView() {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
+          border: Border(bottom: BorderSide(style: BorderStyle.none)),
           middle: Text(
             "Twoje prognozy",
             style: TextStyle(fontWeight: FontWeight.w400),

@@ -1,42 +1,41 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forecast/app_state_notifier.dart';
 import 'package:forecast/first_screen.dart';
-import 'package:forecast/helpers/alert_dialogs.dart';
 import 'package:forecast/bloc/forecast_bloc.dart';
-import 'package:forecast/bloc/forecast_event.dart';
-import 'package:forecast/bloc/forecast_state.dart';
 import 'package:forecast/settings_screen.dart';
-import 'package:forecast/utils/custom_styles.dart';
-import 'package:forecast/no_connection_screen.dart';
 import 'dart:core';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:forecast/forecast_card/forecast_card_list.dart' as globals;
+import 'package:provider/provider.dart';
 
-import 'forecast_card/forecast_card.dart';
-
-void main() => runApp(BlocProvider<ForecastBloc>(
+void main() => runApp(ChangeNotifierProvider<AppStateNotifier>(
+    create: (context) => AppStateNotifier(),
+    child: BlocProvider<ForecastBloc>(
       create: (BuildContext context) => ForecastBloc(),
       child: MyApp(),
-    ));
+    )));
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: CupertinoThemeData(
-          primaryColor: CupertinoColors.activeBlue,
-          primaryContrastingColor: CupertinoColors.activeBlue,
-          scaffoldBackgroundColor: CupertinoColors.white,
-          textTheme: CupertinoTextThemeData(
-              primaryColor: CupertinoColors.black,
-              textStyle: TextStyle(fontFamily: 'San Francisco', fontSize: 17))),
-      home: MyHomePage(title: 'Pogoda'),
+    return Consumer<AppStateNotifier>(
+      builder: (context, appState, child) {
+        return CupertinoApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Pogoda',
+          theme: appState.isDarkModeOn
+              ? CupertinoThemeData(
+                  scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 0.8),
+                  brightness: Brightness.dark,
+                  primaryColor: CupertinoColors.activeBlue)
+              : CupertinoThemeData(
+                  scaffoldBackgroundColor: Color.fromRGBO(240, 240, 240, 1),
+                  brightness: Brightness.light,
+                  barBackgroundColor: Color.fromRGBO(240, 240, 240, 1),
+                  primaryColor: CupertinoColors.activeBlue),
+          home: MyHomePage(title: 'Pogoda'),
+        );
+      },
     );
   }
 }
@@ -58,11 +57,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
+
       tabBar: CupertinoTabBar(
-        backgroundColor: CupertinoColors.white,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.home), title: Text("Główna")),
+              icon: Icon(CupertinoIcons.home),
+              title: Text(
+                "Główna",
+              )),
           BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.settings), title: Text("Ustawienia")),
         ],
@@ -81,7 +83,6 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       },
       resizeToAvoidBottomInset: false,
-      backgroundColor: CupertinoColors.white,
     );
   }
 }

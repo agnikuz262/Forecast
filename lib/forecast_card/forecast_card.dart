@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../utils/custom_styles.dart';
 import 'package:forecast/forecast_card/forecast_card_list.dart' as list;
+
 class ForecastCard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _ForecastCardState();
@@ -25,20 +26,21 @@ class ForecastCard extends StatefulWidget {
   final int sunset;
   final String description;
   final int index;
+  Color textColor;
 
-  ForecastCard({
-    @required this.city,
-    this.date,
-    this.iconDesc,
-    this.temp,
-    this.tempMax,
-    this.tempMin,
-    this.pressure,
-    this.sunrise,
-    this.sunset,
-    this.description,
-    this.index
-  });
+  ForecastCard(
+      {@required this.city,
+      this.date,
+      this.iconDesc,
+      this.temp,
+      this.tempMax,
+      this.tempMin,
+      this.pressure,
+      this.sunrise,
+      this.sunset,
+      this.description,
+      this.index,
+      this.textColor});
 }
 
 class _ForecastCardState extends State<ForecastCard>
@@ -91,12 +93,19 @@ class _ForecastCardState extends State<ForecastCard>
             widget.description == null
                 ? "Brak dostępnego opisu"
                 : "${widget.description.capitalize()}",
-            style: CustomStyles.descriptionStyle,
+            style: widget.textColor != null
+                ? CustomStyles.descriptionStyle
+                    .copyWith(color: widget.textColor)
+                : CustomStyles.descriptionStyle,
             textAlign: TextAlign.center,
           ),
         ),
         Spacer(flex: 2),
-        Center(child: Text("${widget.city}", style: CustomStyles.cityStyle)),
+        Center(
+            child: Text("${widget.city}",
+                style: (widget.textColor != null)
+                    ? CustomStyles.cityStyle.copyWith(color: widget.textColor)
+                    : CustomStyles.cityStyle)),
         Spacer(flex: 3),
         Stack(
           alignment: Alignment.center,
@@ -114,7 +123,11 @@ class _ForecastCardState extends State<ForecastCard>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Text("${widget.temp.toInt()}°", style: CustomStyles.tempStyle),
+                  Text("${widget.temp.toInt()}°",
+                      style: (widget.textColor != null)
+                          ? CustomStyles.tempStyle
+                              .copyWith(color: widget.textColor)
+                          : CustomStyles.tempStyle),
                   Spacer(flex: 1),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -123,23 +136,36 @@ class _ForecastCardState extends State<ForecastCard>
                         children: <Widget>[
                           Text(
                             "Min",
-                            style: CustomStyles.tempLabel,
+                            style: (widget.textColor != null)
+                                ? CustomStyles.tempLabel
+                                    .copyWith(color: widget.textColor)
+                                : CustomStyles.tempLabel,
                           ),
                           SizedBox(width: 5.0),
                           Text(
                             "${widget.tempMin.toInt()}",
-                            style: CustomStyles.tempMinMax,
+                            style: (widget.textColor != null)
+                                ? CustomStyles.tempMinMax
+                                    .copyWith(color: widget.textColor)
+                                : CustomStyles.tempMinMax,
                           ),
                         ],
                       ),
                       // Spacer(flex:2),
                       Row(
                         children: <Widget>[
-                          Text("Max", style: CustomStyles.tempLabel),
+                          Text("Max",
+                              style: (widget.textColor != null)
+                                  ? CustomStyles.tempLabel
+                                      .copyWith(color: widget.textColor)
+                                  : CustomStyles.tempLabel),
                           SizedBox(width: 5.0),
                           Text(
                             "${widget.tempMax.toInt()}",
-                            style: CustomStyles.tempMinMax,
+                            style: (widget.textColor != null)
+                                ? CustomStyles.tempMinMax
+                                    .copyWith(color: widget.textColor)
+                                : CustomStyles.tempMinMax,
                           ),
                         ],
                       ),
@@ -155,7 +181,9 @@ class _ForecastCardState extends State<ForecastCard>
           width: MediaQuery.of(context).size.width,
           alignment: Alignment.center,
           child: Text("${widget.pressure} hPa",
-              style: CustomStyles.pressureStyle),
+              style: (widget.textColor != null)
+                  ? CustomStyles.pressureStyle.copyWith(color: widget.textColor)
+                  : CustomStyles.pressureStyle),
         ),
         Spacer(flex: 2),
         Row(
@@ -166,12 +194,15 @@ class _ForecastCardState extends State<ForecastCard>
               children: <Widget>[
                 Text(
                   "Wschód",
-                  style: CustomStyles.sunStyle,
+                  style: (widget.textColor != null)
+                      ? CustomStyles.sunStyle.copyWith(color: widget.textColor) : CustomStyles.sunStyle,
                 ),
                 SizedBox(height: 2.0),
                 Text(
                   "${TimeFormater().readTimestamp(widget.sunrise)}",
-                  style: CustomStyles.sunStyle,
+                  style: (widget.textColor != null)
+                      ? CustomStyles.sunStyle.copyWith(color: widget.textColor)
+                      : CustomStyles.sunStyle,
                 ),
               ],
             ),
@@ -180,11 +211,16 @@ class _ForecastCardState extends State<ForecastCard>
               children: <Widget>[
                 Text(
                   "Zachód",
-                  style: CustomStyles.sunStyle,
+                  style: (widget.textColor != null)
+                      ? CustomStyles.sunStyle.copyWith(color: widget.textColor)
+                      : CustomStyles.sunStyle,
                 ),
                 SizedBox(height: 2.0),
                 Text("${TimeFormater().readTimestamp(widget.sunset)}",
-                    style: CustomStyles.sunStyle),
+                    style: (widget.textColor != null)
+                        ? CustomStyles.sunStyle
+                            .copyWith(color: widget.textColor)
+                        : CustomStyles.sunStyle),
               ],
             ),
           ],
@@ -194,13 +230,13 @@ class _ForecastCardState extends State<ForecastCard>
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
                 list.forecastList.length,
-                    (i) => Padding(
-                  padding: const EdgeInsets.only(left: 4),
-                  child: StepDotWidget(
-                    list.forecastList.length - i - 1 == widget.index,
-                    radius: 8,
-                  ),
-                ))),
+                (i) => Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: StepDotWidget(
+                        list.forecastList.length - i - 1 == widget.index,
+                        radius: 8,
+                      ),
+                    ))),
         Spacer(flex: 2),
       ],
     );
@@ -211,15 +247,17 @@ class _ForecastCardState extends State<ForecastCard>
       children: <Widget>[
         Text(
           "${DateFormat("dd.MM.yyyy, HH:mm").format(widget.date)}",
-          style: CustomStyles.dateStyle,
+          style: (widget.textColor != null)
+              ? CustomStyles.dateStyle.copyWith(color: widget.textColor)
+              : CustomStyles.dateStyle,
         ),
         Spacer(),
         Container(
           width: 40.0,
           child: FlatButton(
-            onPressed: () {
-            },
-            child: Opacity(opacity: 0.4,
+            onPressed: () {},
+            child: Opacity(
+              opacity: 0.4,
               child: Icon(
                 CupertinoIcons.delete_simple,
                 color: CupertinoColors.activeBlue,
@@ -239,6 +277,7 @@ class _ForecastCardState extends State<ForecastCard>
         showFirst = true;
     });
   }
+
   //todo make icons bigger when iPad
   Widget _getIcon(String iconDesc) {
     switch (iconDesc) {
@@ -282,8 +321,8 @@ class _ForecastCardState extends State<ForecastCard>
                 ? CrossFadeState.showFirst
                 : CrossFadeState.showSecond,
             duration: const Duration(seconds: 1),
-            firstChild:
-                Image.asset('assets/icons/drop.png', width: 100.0, height: 100.0),
+            firstChild: Image.asset('assets/icons/drop.png',
+                width: 100.0, height: 100.0),
             secondChild: Image.asset('assets/icons/drop_reverse.png',
                 width: 100.0, height: 100.0));
 

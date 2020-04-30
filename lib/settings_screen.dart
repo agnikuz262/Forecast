@@ -17,19 +17,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: CupertinoPageScaffold(
+      body: CupertinoPageScaffold(child:
+          Consumer<AppStateNotifier>(builder: (context, appState, child) {
+        return SafeArea(
           child: Column(
             children: <Widget>[
               Container(height: 20.0),
               Divider(
                 height: 0,
                 thickness: 0.3,
-                color: CupertinoColors.systemGrey,
+                color: appState.isDarkModeOn
+                    ? Colors.transparent
+                    : CupertinoColors.systemGrey,
               ),
               Container(
                 width: MediaQuery.of(context).size.width,
-                color: Colors.white,
+                color: appState.isDarkModeOn
+                    ? Color.fromRGBO(40, 40, 40, 1)
+                    : Colors.white,
                 child: Padding(
                   padding:
                       const EdgeInsets.only(top: 8, left: 15.0, right: 2.0),
@@ -42,7 +47,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           mainAxisSize: MainAxisSize.max,
                           children: <Widget>[
-                            Text("Tryb ciemny"),
+                            Text("Tryb ciemny",
+                                style: TextStyle(
+                                    color: appState.isDarkModeOn
+                                        ? Colors.white
+                                        : Colors.black)),
                             CupertinoSwitch(
                               value: _isDarkTheme,
                               onChanged: (bool value) {
@@ -60,7 +69,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       Divider(
                         thickness: 0.3,
-                        color: CupertinoColors.systemGrey,
+                        color: appState.isDarkModeOn
+                            ? Colors.white24
+                            : CupertinoColors.systemGrey,
                       ),
                       GestureDetector(
                         onTap: _openChangeDefaultForecastWidget,
@@ -70,6 +81,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               children: <Widget>[
                                 Text(
                                   "Zmień domyślną prognozę pogody",
+                                  style: TextStyle(
+                                      color: appState.isDarkModeOn
+                                          ? Colors.white
+                                          : Colors.black),
                                   textAlign: TextAlign.left,
                                 ),
                               ],
@@ -100,7 +115,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Divider(
                 height: 0,
                 thickness: 0.3,
-                color: CupertinoColors.systemGrey,
+                color: appState.isDarkModeOn
+                    ? Colors.transparent
+                    : CupertinoColors.systemGrey,
               ),
               SizedBox(
                 height: 30,
@@ -108,20 +125,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Divider(
                 height: 0,
                 thickness: 0.3,
-                color: CupertinoColors.systemGrey,
+                color: appState.isDarkModeOn
+                    ? Colors.transparent
+                    : CupertinoColors.systemGrey,
               ),
               Container(
                   width: MediaQuery.of(context).size.width,
                   height: 50,
-                  color: Colors.white,
+                  color: appState.isDarkModeOn
+                      ? Color.fromRGBO(40, 40, 40, 1)
+                      : Colors.white,
                   child: GestureDetector(
                     onTap: _openInfoScreen,
                     child: Padding(
-                      padding:
-                      const EdgeInsets.only(top: 8, left: 15.0, right: 2.0, bottom: 8),
+                      padding: const EdgeInsets.only(
+                          top: 8, left: 15.0, right: 2.0, bottom: 8),
                       child: Row(
                         children: <Widget>[
-                          Text("O aplikacji"),
+                          Text("O aplikacji",
+                              style: TextStyle(
+                                  color: appState.isDarkModeOn
+                                      ? Colors.white
+                                      : Colors.black)),
                         ],
                       ),
                     ),
@@ -129,12 +154,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Divider(
                 height: 0,
                 thickness: 0.3,
-                color: CupertinoColors.systemGrey,
+                color: appState.isDarkModeOn
+                    ? Colors.transparent
+                    : CupertinoColors.systemGrey,
               ),
             ],
           ),
-        ),
-      ),
+        );
+      })),
     );
   }
 

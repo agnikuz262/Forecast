@@ -3,9 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forecast/add_city_dialog.dart';
+import 'package:forecast/app_state_notifier.dart';
 import 'package:forecast/default_forecast_widget.dart';
 import 'package:forecast/forecast_list_screen.dart';
 import 'package:forecast/info_screen.dart';
+import 'package:provider/provider.dart';
 import 'bloc/forecast_bloc.dart';
 import 'bloc/forecast_event.dart';
 import 'bloc/forecast_state.dart';
@@ -171,72 +173,76 @@ class _FirstScreenState extends State<FirstScreen> {
   }
 
   Widget _buildView(BuildContext context) {
-    return SafeArea(
-      // bottom: true,
-      child: CupertinoPageScaffold(
-        resizeToAvoidBottomInset: false,
-          child: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Spacer(flex: 1),
-            (list.defaultForecast != null)
-                ? DefaultForecastWidget()
-                : Container(),
-            Spacer(
-              flex: 3,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 5 / 6,
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    width: double.infinity,
-                    child: Container(
-                      decoration: BoxDecoration(boxShadow: [
-                        BoxShadow(
-                            offset: Offset(1.0, 1.0),
-                            blurRadius: 5.0,
-                            color: Colors.grey)
-                      ]),
-                      child: CupertinoButton(
-                        borderRadius: BorderRadius.circular(6.0),
-                        color: CupertinoColors.activeBlue,
-                        onPressed: _openAddNew,
-                        child: Text("Nowa prognoza",
-                            style: TextStyle(color: CupertinoColors.white)),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10.0),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Container(
-                      decoration: BoxDecoration(boxShadow: [
-                        BoxShadow(
-                            offset: Offset(1.0, 1.0),
-                            blurRadius: 5.0,
-                            color: Colors.grey)
-                      ]),
-                      child: CupertinoButton(
-                        borderRadius: BorderRadius.circular(6.0),
-                        color: CupertinoColors.activeBlue,
-                        onPressed: _openForecastList,
-                        child: Text(
-                          "Wszystkie prognozy",
-                          style: TextStyle(color: CupertinoColors.white),
+    return CupertinoPageScaffold(
+      resizeToAvoidBottomInset: false,
+      child: Consumer<AppStateNotifier>(builder: (context, appState, child) {
+        return SafeArea(
+            child: Container(
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Spacer(flex: 1),
+              (list.defaultForecast != null)
+                  ? DefaultForecastWidget(
+                textColor: appState.isDarkModeOn ? Colors.white : null,
+                      cardColor: appState.isDarkModeOn ? Color.fromRGBO(74, 74, 74, 1) : null,
+                    )
+                  : Container(),
+              Spacer(
+                flex: 3,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 5 / 6,
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      width: double.infinity,
+                      child: Container(
+                        decoration: BoxDecoration(boxShadow: [
+                          BoxShadow(
+                              offset: Offset(1.0, 1.0),
+                              blurRadius: 5.0,
+                              color: Colors.grey)
+                        ]),
+                        child: CupertinoButton(
+                          borderRadius: BorderRadius.circular(6.0),
+                          color: CupertinoColors.activeBlue,
+                          onPressed: _openAddNew,
+                          child: Text("Nowa prognoza",
+                              style: TextStyle(color: CupertinoColors.white)),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 10.0),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Container(
+                        decoration: BoxDecoration(boxShadow: [
+                          BoxShadow(
+                              offset: Offset(1.0, 1.0),
+                              blurRadius: 5.0,
+                              color: Colors.grey)
+                        ]),
+                        child: CupertinoButton(
+                          borderRadius: BorderRadius.circular(6.0),
+                          color: CupertinoColors.activeBlue,
+                          onPressed: _openForecastList,
+                          child: Text(
+                            "Wszystkie prognozy",
+                            style: TextStyle(color: CupertinoColors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Spacer(flex: 1),
-          ],
-        ),
-      )),
+              Spacer(flex: 1),
+            ],
+          ),
+        ));
+      }),
     );
   }
 

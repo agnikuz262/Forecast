@@ -25,13 +25,20 @@ class MyApp extends StatelessWidget {
           title: 'Pogoda',
           theme: appState.isDarkModeOn
               ? CupertinoThemeData(
-                  scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 0.8),
+                  barBackgroundColor: Color.fromRGBO(25, 25, 25, 1),
+                  textTheme: CupertinoTextThemeData(
+                      textStyle: TextStyle(
+                          fontFamily: 'San Francisco', color: Colors.white)),
+                  scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
                   brightness: Brightness.dark,
                   primaryColor: CupertinoColors.activeBlue)
               : CupertinoThemeData(
                   scaffoldBackgroundColor: Color.fromRGBO(240, 240, 240, 1),
                   brightness: Brightness.light,
                   barBackgroundColor: Color.fromRGBO(240, 240, 240, 1),
+                  textTheme: CupertinoTextThemeData(
+                      textStyle: TextStyle(
+                          fontFamily: 'San Francisco', color: Colors.black)),
                   primaryColor: CupertinoColors.activeBlue),
           home: MyHomePage(title: 'Pogoda'),
         );
@@ -57,7 +64,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
-
       tabBar: CupertinoTabBar(
         items: [
           BottomNavigationBarItem(

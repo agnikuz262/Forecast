@@ -7,6 +7,11 @@ import 'package:forecast/helpers/icon_provider.dart';
 import 'package:forecast/utils/custom_styles.dart';
 
 class DefaultForecastWidget extends StatefulWidget {
+  final Color cardColor;
+  final Color textColor;
+
+  DefaultForecastWidget({this.cardColor, this.textColor});
+
   @override
   _DefaultForecastWidgetState createState() => _DefaultForecastWidgetState();
 }
@@ -23,7 +28,7 @@ class _DefaultForecastWidgetState extends State<DefaultForecastWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.white,
+      color: widget.cardColor ?? Colors.white,
       elevation: 4.0,
       child: Padding(
         padding: const EdgeInsets.all(18.0),
@@ -32,7 +37,8 @@ class _DefaultForecastWidgetState extends State<DefaultForecastWidget> {
           children: <Widget>[
             Text(
               defaultCard.city,
-              style: CustomStyles.cityStyle,
+              style: CustomStyles.cityStyle
+                  .copyWith(color: widget.textColor ?? null),
             ),
             SizedBox(
               height: 10.0,
@@ -40,7 +46,9 @@ class _DefaultForecastWidgetState extends State<DefaultForecastWidget> {
             IconProvider.getIcon(defaultCard.iconDesc),
             Text(
               "${defaultCard.temp.toInt()}°",
-              style: CustomStyles.tempWidgetStyle,textAlign: TextAlign.center,
+              style: CustomStyles.tempWidgetStyle
+                  .copyWith(color: widget.textColor ?? null),
+              textAlign: TextAlign.center,
             ),
             CupertinoButton(
               child: Text("Szczegóły"),

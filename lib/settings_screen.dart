@@ -33,7 +33,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 color: appState.isDarkModeOn
-                    ? Color.fromRGBO(40, 40, 40, 1)
+                    ? Color.fromRGBO(35, 35, 35, 1)
                     : Colors.white,
                 child: Padding(
                   padding:
@@ -133,7 +133,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   width: MediaQuery.of(context).size.width,
                   height: 50,
                   color: appState.isDarkModeOn
-                      ? Color.fromRGBO(40, 40, 40, 1)
+                      ? Color.fromRGBO(35, 35, 35, 1)
                       : Colors.white,
                   child: GestureDetector(
                     onTap: _openInfoScreen,

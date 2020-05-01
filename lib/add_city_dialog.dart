@@ -27,17 +27,17 @@ class _AddCityDialogState extends State<AddCityDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SizedBox(height: 10.0),
-          Text("Wprowadź miasto"),
-          SizedBox(height: 10.0),
-          CupertinoTextField(decoration: BoxDecoration(borderRadius: BorderRadius.circular(100.0),
-              //todo
-              color: CupertinoColors.black),
+          SizedBox(height: 20.0),
+          CupertinoTextField(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6.0),
+                border: Border.all(
+                    width: 0.5)),
             placeholder: "Wprowadź miasto",
             textAlignVertical: TextAlignVertical.top,
             textCapitalization: TextCapitalization.words,
             controller: _textController,
-            padding: const EdgeInsets.fromLTRB(16.0, 8.0, 8.0, 8.0),
+            padding: const EdgeInsets.fromLTRB(16.0, 10.0, 8.0, 8.0),
             enabled: true,
           ),
         ],
@@ -49,7 +49,9 @@ class _AddCityDialogState extends State<AddCityDialog> {
         ),
         CupertinoDialogAction(
           child: Text("Dodaj"),
-          onPressed: () { _addForecast(); },
+          onPressed: () {
+            _addForecast();
+          },
         ),
       ],
     );

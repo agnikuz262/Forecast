@@ -29,7 +29,7 @@ class _DefaultForecastWidgetState extends State<DefaultForecastWidget> {
   Widget build(BuildContext context) {
     return Card(
       color: widget.cardColor ?? Colors.white,
-      elevation: 4.0,
+      elevation: 8.0,
       child: Padding(
         padding: const EdgeInsets.all(18.0),
         child: Column(

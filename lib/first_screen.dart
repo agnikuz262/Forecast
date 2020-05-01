@@ -36,6 +36,7 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: BlocConsumer<ForecastBloc, ForecastState>(
         builder: (context, state) {
           if (state is ForecastInitial) {
@@ -174,7 +175,6 @@ class _FirstScreenState extends State<FirstScreen> {
 
   Widget _buildView(BuildContext context) {
     return CupertinoPageScaffold(
-      resizeToAvoidBottomInset: false,
       child: Consumer<AppStateNotifier>(builder: (context, appState, child) {
         return SafeArea(
             child: Container(
@@ -185,8 +185,10 @@ class _FirstScreenState extends State<FirstScreen> {
               Spacer(flex: 1),
               (list.defaultForecast != null)
                   ? DefaultForecastWidget(
-                textColor: appState.isDarkModeOn ? Colors.white : null,
-                      cardColor: appState.isDarkModeOn ? Color.fromRGBO(74, 74, 74, 1) : null,
+                      textColor: appState.isDarkModeOn ? Colors.white : null,
+                      cardColor: appState.isDarkModeOn
+                          ? Color.fromRGBO(30, 30, 30, 1)
+                          : null,
                     )
                   : Container(),
               Spacer(
@@ -203,7 +205,9 @@ class _FirstScreenState extends State<FirstScreen> {
                           BoxShadow(
                               offset: Offset(1.0, 1.0),
                               blurRadius: 5.0,
-                              color: Colors.grey)
+                              color: appState.isDarkModeOn
+                                  ? Colors.black12
+                                  : Colors.grey)
                         ]),
                         child: CupertinoButton(
                           borderRadius: BorderRadius.circular(6.0),
@@ -222,7 +226,9 @@ class _FirstScreenState extends State<FirstScreen> {
                           BoxShadow(
                               offset: Offset(1.0, 1.0),
                               blurRadius: 5.0,
-                              color: Colors.grey)
+                              color: appState.isDarkModeOn
+                                  ? Colors.black12
+                                  : Colors.grey)
                         ]),
                         child: CupertinoButton(
                           borderRadius: BorderRadius.circular(6.0),

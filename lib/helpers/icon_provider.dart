@@ -15,7 +15,7 @@ class IconProvider {
 
       case "Rain":
         return Image.asset('assets/icons/drop.png',
-            width: 100.0, height: 100.0);
+            width: 80.0, height: 80.0);
 
       case "Snow":
         return Image.asset('assets/icons/snow.png', width: 90.0, height: 90.0);

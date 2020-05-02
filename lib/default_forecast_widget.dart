@@ -44,6 +44,7 @@ class _DefaultForecastWidgetState extends State<DefaultForecastWidget> {
               height: 10.0,
             ),
             IconProvider.getIcon(defaultCard.iconDesc),
+            SizedBox(height: 10.0),
             Text(
               "${defaultCard.temp.toInt()}°",
               style: CustomStyles.tempWidgetStyle

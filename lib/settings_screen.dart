@@ -13,6 +13,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _isDarkTheme = false;
+  int selectItem = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -90,21 +91,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ],
                             )),
                       ),
-//                  GestureDetector(
-//                    onTap: _openChangeDefaultForecastWidget,
-//                    child: Container(
-//                      height: 50,
-//                      child: Row(
-//                        children: <Widget>[
-//                          Text("Zobacz listę zapisanych prognoz"),
-//                        ],
-//                      ),
-//                    ),
-//                  ),
-//                  Divider(
-//                    thickness: 0.2,
-//                    color: CupertinoColors.systemGrey,
-//                  ),
                       SizedBox(
                         height: 10,
                       ),
@@ -166,8 +152,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _openChangeDefaultForecastWidget() {
-    Navigator.of(context).push(
-        CupertinoPageRoute(builder: (context) => ChangeDefaultForecast()));
+    showCupertinoModalPopup(
+        context: context,
+        builder: (BuildContext builder) {
+          return _buildBottomPicker(CupertinoPicker(
+            onSelectedItemChanged: (int index) {
+              selectItem = index;
+            },
+            itemExtent: 50.0,
+            looping: false,
+            squeeze: 1.4,
+            magnification: 0.8,
+            children: <Widget>[
+              Center(child: Text("Miasto 1")),
+              Center(child: Text("Miasto 2")),
+              Center(child: Text("Miasto 3")),
+              Center(child: Text("Miasto 4")),
+            ],
+          ));
+        });
+  }
+
+  Widget _buildBottomPicker(Widget picker) {
+    return Container(
+      height: 200,
+      child: GestureDetector(
+        // Blocks taps from propagating to the modal sheet and popping.
+        onTap: () {},
+        child: picker,
+      ),
+    );
   }
 
   void _openInfoScreen() {

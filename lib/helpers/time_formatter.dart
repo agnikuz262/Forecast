@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-class TimeFormater {
+class TimeFormatter {
   String readTimestamp(int timestamp) {
     var now = new DateTime.now();
     var format = DateFormat('HH:mm');

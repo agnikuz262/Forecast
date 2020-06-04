@@ -4,8 +4,8 @@ import 'package:animator/animator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forecast/bloc/forecast_bloc.dart';
 import 'package:forecast/forecast_card/step_dot_widget.dart';
-import 'package:forecast/helpers/time_formater.dart';
-import '../helpers/uppercase_extension.dart';
+import 'package:forecast/helpers/time_formatter.dart';
+import '../helpers/string_formatter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -86,18 +86,21 @@ class _ForecastCardState extends State<ForecastCard>
         Spacer(flex: 3),
         _getIcon(widget.iconDesc),
         Spacer(flex: 2),
-        Container(
-          width: MediaQuery.of(context).size.width,
-          alignment: Alignment.center,
-          child: Text(
-            widget.description == null
-                ? "Brak dostępnego opisu"
-                : "${widget.description.capitalize()}",
-            style: widget.textColor != null
-                ? CustomStyles.descriptionStyle
-                    .copyWith(color: widget.textColor)
-                : CustomStyles.descriptionStyle,
-            textAlign: TextAlign.center,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            alignment: Alignment.center,
+            child: Text(
+              widget.description == null
+                  ? "Brak dostępnego opisu"
+                  : StringFormatter.upperFirstCase(widget.description),
+              style: widget.textColor != null
+                  ? CustomStyles.descriptionStyle
+                      .copyWith(color: widget.textColor)
+                  : CustomStyles.descriptionStyle,
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
         Spacer(flex: 2),
@@ -195,11 +198,12 @@ class _ForecastCardState extends State<ForecastCard>
                 Text(
                   "Wschód",
                   style: (widget.textColor != null)
-                      ? CustomStyles.sunStyle.copyWith(color: widget.textColor) : CustomStyles.sunStyle,
+                      ? CustomStyles.sunStyle.copyWith(color: widget.textColor)
+                      : CustomStyles.sunStyle,
                 ),
                 SizedBox(height: 2.0),
                 Text(
-                  "${TimeFormater().readTimestamp(widget.sunrise)}",
+                  "${TimeFormatter().readTimestamp(widget.sunrise)}",
                   style: (widget.textColor != null)
                       ? CustomStyles.sunStyle.copyWith(color: widget.textColor)
                       : CustomStyles.sunStyle,
@@ -216,7 +220,7 @@ class _ForecastCardState extends State<ForecastCard>
                       : CustomStyles.sunStyle,
                 ),
                 SizedBox(height: 2.0),
-                Text("${TimeFormater().readTimestamp(widget.sunset)}",
+                Text("${TimeFormatter().readTimestamp(widget.sunset)}",
                     style: (widget.textColor != null)
                         ? CustomStyles.sunStyle
                             .copyWith(color: widget.textColor)

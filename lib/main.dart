@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forecast/app_state_notifier.dart';
-import 'package:forecast/first_screen.dart';
+import 'file:///C:/Users/akuzniecow/AndroidStudioProjects/forecast/lib/ui/first_screen.dart';
 import 'package:forecast/bloc/forecast_bloc.dart';
-import 'package:forecast/settings_screen.dart';
+import 'file:///C:/Users/akuzniecow/AndroidStudioProjects/forecast/lib/ui/settings_screen.dart';
 import 'dart:core';
 import 'package:provider/provider.dart';
 
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
                           fontFamily: 'San Francisco', color: Colors.white)),
                   scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
                   brightness: Brightness.dark,
-                  primaryColor: CupertinoColors.activeBlue)
+                  primaryColor: Color.fromRGBO(50, 130, 209, 1.0),)
               : CupertinoThemeData(
                   scaffoldBackgroundColor: Color.fromRGBO(240, 240, 240, 1),
                   brightness: Brightness.light,
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
                   textTheme: CupertinoTextThemeData(
                       textStyle: TextStyle(
                           fontFamily: 'San Francisco', color: Colors.black)),
-                  primaryColor: CupertinoColors.activeBlue),
+                  primaryColor: Color.fromRGBO(50, 130, 209, 1.0)),
           home: MyHomePage(title: 'Pogoda'),
         );
       },

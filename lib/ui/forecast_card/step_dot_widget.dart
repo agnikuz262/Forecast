@@ -18,7 +18,7 @@ class StepDotWidget extends StatelessWidget {
         decoration: BoxDecoration(
             color: color == null
                 ? selected
-                    ? CupertinoColors.activeBlue
+                    ?  Color.fromRGBO(50, 130, 209, 1.0)
                     : Color.fromRGBO(229, 229, 229, 1)
                 : color,
             borderRadius: BorderRadius.circular(16)));

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:forecast/app_state_notifier.dart';
-import 'package:forecast/info_screen.dart';
+import 'package:forecast/ui/info_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'change_default_forecast_widget.dart';
+import '../change_default_forecast_widget.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -63,7 +63,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   _isDarkTheme = !_isDarkTheme;
                                 });
                               },
-                              activeColor: CupertinoColors.activeBlue,
+                              activeColor: Color.fromRGBO(50, 130, 209, 1.0),
                             ),
                           ],
                         ),

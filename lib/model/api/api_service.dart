@@ -13,9 +13,11 @@ class ApiService {
     if (response.statusCode == 200) {
       try {
         return WeatherData.fromJson(json.decode(response.body));
-      } catch (e) {
+      } catch (_) {
         return true;
       }
+    } else if(response.statusCode == 404) {
+      return true;
     } else {
       return false;
     }

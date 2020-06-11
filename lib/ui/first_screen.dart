@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:forecast/add_city_dialog.dart';
+import 'file:///C:/Users/akuzniecow/AndroidStudioProjects/forecast/lib/ui/add_city_dialog.dart';
 import 'package:forecast/app_state_notifier.dart';
 import 'package:forecast/bloc/forecast_bloc.dart';
 import 'package:forecast/bloc/forecast_event.dart';
 import 'package:forecast/bloc/forecast_state.dart';
-import 'package:forecast/default_forecast_widget.dart';
+import 'file:///C:/Users/akuzniecow/AndroidStudioProjects/forecast/lib/ui/default_forecast_widget.dart';
 import 'package:forecast/ui/forecast_card/forecast_card_list.dart' as list;
 import 'package:forecast/ui/forecast_list_screen.dart';
 import 'package:forecast/ui/info_screen.dart';
@@ -23,14 +23,15 @@ class FirstScreen extends StatefulWidget {
 class _FirstScreenState extends State<FirstScreen> {
   Completer<void> _refreshCompleter;
   ForecastBloc bloc;
-  String city = "Gliwice";
   bool isConnection = true;
 
   @override
   void initState() {
     super.initState();
-    bloc = BlocProvider.of<ForecastBloc>(context)
-      ..add(ForecastAddCityEvent(city: city));
+    bloc = BlocProvider.of<ForecastBloc>(context);
+     // ..add(ForecastAddCityEvent(city: city));
+    //todo żeby działało
+   // bloc.add(RefreshForecast());
     _refreshCompleter = Completer<void>();
   }
 
@@ -41,7 +42,7 @@ class _FirstScreenState extends State<FirstScreen> {
       body: BlocConsumer<ForecastBloc, ForecastState>(
         builder: (context, state) {
           if (state is ForecastInitial) {
-            return Center();
+            return _buildView(context);
           }
           if (state is ForecastLoading) {
             return Center(

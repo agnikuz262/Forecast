@@ -77,10 +77,9 @@ class _DefaultForecastWidgetState extends State<DefaultForecastWidget> {
                           "assets/icons/sun_and_cloud.png",
                           height: 70,
                           width: 70,
-                          color: Colors.black12,
+                          color: widget.textColor ?? Colors.black12,
                         ),
                         SizedBox(height: 10.0,),
-
                         Text(
                           "Po dodaniu prognoz, ustaw ją w zakładce Ustawienia.",
                           textAlign: TextAlign.center,

@@ -48,7 +48,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
                 forecast: newForecast, listIndex: list.forecastList.length));
         yield ForecastLoaded();
       } else if (response == true) {
-        ForecastNotFound();
+        yield ForecastNotFound();
       } else {
         yield ForecastFailure(error: "No connection");
       }

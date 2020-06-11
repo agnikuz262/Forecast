@@ -4,7 +4,7 @@ import 'package:forecast/app_state_notifier.dart';
 import 'package:forecast/ui/info_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../change_default_forecast_widget.dart';
+import 'change_default_forecast_widget.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override

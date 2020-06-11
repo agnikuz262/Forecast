@@ -38,6 +38,9 @@ class _ForecastListScreenState extends State<ForecastListScreen> {
             ),
           );
         }
+        if(state is ForecastInitial) {
+          return _buildView();
+        }
         if (state is ForecastLoaded) {
           state = ForecastInitial();
           return _buildView();
@@ -59,6 +62,12 @@ class _ForecastListScreenState extends State<ForecastListScreen> {
     ));
   }
 
+  Widget _emptyListWidget() {
+    return Center(
+      child: Text("Brak dodanych prognoz"),
+    );
+  }
+
   Widget _buildView() {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
@@ -68,21 +77,27 @@ class _ForecastListScreenState extends State<ForecastListScreen> {
             style: TextStyle(fontWeight: FontWeight.w400),
           ),
           trailing: IconButton(
-            icon: Icon(CupertinoIcons.refresh, color: Color.fromRGBO(50, 130, 209, 1.0),),
-              onPressed: () {
+            icon: Icon(
+              CupertinoIcons.refresh,
+              color: Color.fromRGBO(50, 130, 209, 1.0),
+            ),
+            onPressed: () {
               _bloc.add(RefreshForecast());
-              },
+            },
           ),
         ),
-        child: Consumer<AppStateNotifier>(builder: (context, appState, child) {
-          list.forecastList = list.forecastList
-              .map((forecastCard) => ForecastCard(
-                    forecast: forecastCard.forecast,
-                    listIndex: forecastCard.listIndex,
-                    textColor: appState.isDarkModeOn ? Colors.white : null,
-                  ))
-              .toList();
-          return SafeArea(child: PageView(children: list.forecastList));
-        }));
+        child: (list.forecastList.isEmpty)
+            ? _emptyListWidget()
+            : Consumer<AppStateNotifier>(builder: (context, appState, child) {
+                list.forecastList = list.forecastList
+                    .map((forecastCard) => ForecastCard(
+                          forecast: forecastCard.forecast,
+                          listIndex: forecastCard.listIndex,
+                          textColor:
+                              appState.isDarkModeOn ? Colors.white : null,
+                        ))
+                    .toList();
+                return SafeArea(child: PageView(children: list.forecastList));
+              }));
   }
 }

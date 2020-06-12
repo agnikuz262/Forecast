@@ -4,6 +4,7 @@ import 'package:animator/animator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forecast/app_state_notifier.dart';
 import 'package:forecast/bloc/forecast_bloc.dart';
+import 'package:forecast/bloc/forecast_event.dart';
 import 'package:forecast/model/api/forecast_model.dart';
 import 'package:forecast/ui/forecast_card/step_dot_widget.dart';
 import 'package:provider/provider.dart';
@@ -42,12 +43,12 @@ class _ForecastCardState extends State<ForecastCard>
     timer =
         Timer.periodic(Duration(milliseconds: 1100), (Timer t) => _showDrops());
     sunController =
-        AnimationController(duration: const Duration(seconds: 4), vsync: this)
-          ..repeat(period: new Duration(seconds: 20));
+    AnimationController(duration: const Duration(seconds: 4), vsync: this)
+      ..repeat(period: new Duration(seconds: 20));
     sunAnimation = Tween(begin: 0.0, end: 2 * pi).animate(sunController);
     cloudsController =
-        AnimationController(vsync: this, duration: Duration(seconds: 3))
-          ..repeat(period: new Duration(seconds: 3));
+    AnimationController(vsync: this, duration: Duration(seconds: 3))
+      ..repeat(period: new Duration(seconds: 3));
     cloudsAnimation = Tween(begin: -8.0, end: 3.0).animate(cloudsController);
     cloudsController.forward();
     cloudsController.repeat(reverse: true);
@@ -56,179 +57,188 @@ class _ForecastCardState extends State<ForecastCard>
   @override
   Widget build(BuildContext context) {
     return Consumer<AppStateNotifier>(builder: (context, appState, child) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: _buildDate(appState),
-          ),
-          Spacer(flex: 3),
-          _getIcon(widget.forecast.iconDesc),
-          Spacer(flex: 2),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              alignment: Alignment.center,
-              child: Text(
-                widget.forecast.description == ""
-                    ? "Brak dostępnego opisu"
-                    : StringFormatter.upperFirstCase(
-                        widget.forecast.description),
-                style: widget.textColor != null
-                    ? CustomStyles.descriptionStyle
-                        .copyWith(color: widget.textColor)
-                    : CustomStyles.descriptionStyle,
-                textAlign: TextAlign.center,
-              ),
+      return Container(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: _buildDate(appState),
             ),
-          ),
-          Spacer(flex: 2),
-          Center(
-              child: Text("${widget.forecast.city}",
-                  style: (widget.textColor != null)
-                      ? CustomStyles.cityStyle.copyWith(color: widget.textColor)
-                      : CustomStyles.cityStyle)),
-          Spacer(flex: 3),
-          Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Opacity(
-                opacity: 0.05,
-                child: Container(
-                  height: 120,
-                  color: CupertinoColors.activeBlue,
+            Spacer(flex: 3),
+            _getIcon(widget.forecast.iconDesc),
+            Spacer(flex: 2),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Container(
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                alignment: Alignment.center,
+                child: Text(
+                  widget.forecast.description == ""
+                      ? "Brak dostępnego opisu"
+                      : StringFormatter.upperFirstCase(
+                      widget.forecast.description),
+                  style: widget.textColor != null
+                      ? CustomStyles.descriptionStyle
+                      .copyWith(color: widget.textColor)
+                      : CustomStyles.descriptionStyle,
+                  textAlign: TextAlign.center,
                 ),
               ),
-              Container(
-                height: 100,
-                color: Colors.transparent,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text("${widget.forecast.temp.toInt()}°",
-                        style: (widget.textColor != null)
-                            ? CustomStyles.tempStyle
-                                .copyWith(color: widget.textColor)
-                            : CustomStyles.tempStyle),
-                    Spacer(flex: 1),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              "Min",
-                              style: (widget.textColor != null)
-                                  ? CustomStyles.tempLabel
-                                      .copyWith(color: widget.textColor)
-                                  : CustomStyles.tempLabel,
-                            ),
-                            SizedBox(width: 5.0),
-                            Text(
-                              "${widget.forecast.tempMin.toInt()}",
-                              style: (widget.textColor != null)
-                                  ? CustomStyles.tempMinMax
-                                      .copyWith(color: widget.textColor)
-                                  : CustomStyles.tempMinMax,
-                            ),
-                          ],
-                        ),
-                        // Spacer(flex:2),
-                        Row(
-                          children: <Widget>[
-                            Text("Max",
+            ),
+            Spacer(flex: 2),
+            Center(
+                child: Text("${widget.forecast.city}",
+                    style: (widget.textColor != null)
+                        ? CustomStyles.cityStyle.copyWith(color: widget.textColor)
+                        : CustomStyles.cityStyle)),
+            Spacer(flex: 3),
+            Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Opacity(
+                  opacity: 0.05,
+                  child: Container(
+                    height: 120,
+                    color: CupertinoColors.activeBlue,
+                  ),
+                ),
+                Container(
+                  height: 100,
+                  color: Colors.transparent,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text("${widget.forecast.temp.toInt()}°",
+                          style: (widget.textColor != null)
+                              ? CustomStyles.tempStyle
+                              .copyWith(color: widget.textColor)
+                              : CustomStyles.tempStyle),
+                      Spacer(flex: 1),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                "Min",
                                 style: (widget.textColor != null)
                                     ? CustomStyles.tempLabel
-                                        .copyWith(color: widget.textColor)
-                                    : CustomStyles.tempLabel),
-                            SizedBox(width: 5.0),
-                            Text(
-                              "${widget.forecast.tempMax.toInt()}",
-                              style: (widget.textColor != null)
-                                  ? CustomStyles.tempMinMax
+                                    .copyWith(color: widget.textColor)
+                                    : CustomStyles.tempLabel,
+                              ),
+                              SizedBox(width: 5.0),
+                              Text(
+                                "${widget.forecast.tempMin.toInt()}",
+                                style: (widget.textColor != null)
+                                    ? CustomStyles.tempMinMax
+                                    .copyWith(color: widget.textColor)
+                                    : CustomStyles.tempMinMax,
+                              ),
+                            ],
+                          ),
+                          // Spacer(flex:2),
+                          Row(
+                            children: <Widget>[
+                              Text("Max",
+                                  style: (widget.textColor != null)
+                                      ? CustomStyles.tempLabel
                                       .copyWith(color: widget.textColor)
-                                  : CustomStyles.tempMinMax,
-                            ),
-                          ],
-                        ),
-                      ],
+                                      : CustomStyles.tempLabel),
+                              SizedBox(width: 5.0),
+                              Text(
+                                "${widget.forecast.tempMax.toInt()}",
+                                style: (widget.textColor != null)
+                                    ? CustomStyles.tempMinMax
+                                    .copyWith(color: widget.textColor)
+                                    : CustomStyles.tempMinMax,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Spacer(flex: 3),
+            Container(
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              alignment: Alignment.center,
+              child: Text("${widget.forecast.pressure} hPa",
+                  style: (widget.textColor != null)
+                      ? CustomStyles.pressureStyle
+                      .copyWith(color: widget.textColor)
+                      : CustomStyles.pressureStyle),
+            ),
+            Spacer(flex: 2),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      "Wschód",
+                      style: (widget.textColor != null)
+                          ? CustomStyles.sunStyle
+                          .copyWith(color: widget.textColor)
+                          : CustomStyles.sunStyle,
+                    ),
+                    SizedBox(height: 2.0),
+                    Text(
+                      widget.forecast.sunrise,
+                      style: (widget.textColor != null)
+                          ? CustomStyles.sunStyle
+                          .copyWith(color: widget.textColor)
+                          : CustomStyles.sunStyle,
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-          Spacer(flex: 3),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            alignment: Alignment.center,
-            child: Text("${widget.forecast.pressure} hPa",
-                style: (widget.textColor != null)
-                    ? CustomStyles.pressureStyle
-                        .copyWith(color: widget.textColor)
-                    : CustomStyles.pressureStyle),
-          ),
-          Spacer(flex: 2),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    "Wschód",
-                    style: (widget.textColor != null)
-                        ? CustomStyles.sunStyle
-                            .copyWith(color: widget.textColor)
-                        : CustomStyles.sunStyle,
-                  ),
-                  SizedBox(height: 2.0),
-                  Text(
-                    widget.forecast.sunrise,
-                    style: (widget.textColor != null)
-                        ? CustomStyles.sunStyle
-                            .copyWith(color: widget.textColor)
-                        : CustomStyles.sunStyle,
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    "Zachód",
-                    style: (widget.textColor != null)
-                        ? CustomStyles.sunStyle
-                            .copyWith(color: widget.textColor)
-                        : CustomStyles.sunStyle,
-                  ),
-                  SizedBox(height: 2.0),
-                  Text(widget.forecast.sunset,
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      "Zachód",
                       style: (widget.textColor != null)
                           ? CustomStyles.sunStyle
-                              .copyWith(color: widget.textColor)
-                          : CustomStyles.sunStyle),
-                ],
-              ),
-            ],
-          ),
-          Spacer(flex: 1),
-          Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                  list.forecastList.length,
-                  (i) => Padding(
-                        padding: const EdgeInsets.only(left: 4),
-                        child: StepDotWidget(
-                          list.forecastList.length - i - 1 == widget.listId,
-                          radius: 8,
-                        ),
-                      ))),
-          Spacer(flex: 2),
-        ],
+                          .copyWith(color: widget.textColor)
+                          : CustomStyles.sunStyle,
+                    ),
+                    SizedBox(height: 2.0),
+                    Text(widget.forecast.sunset,
+                        style: (widget.textColor != null)
+                            ? CustomStyles.sunStyle
+                            .copyWith(color: widget.textColor)
+                            : CustomStyles.sunStyle),
+                  ],
+                ),
+              ],
+            ),
+            Spacer(flex: 1),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                    list.forecastList.length,
+                        (i) =>
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4),
+                          child: StepDotWidget(
+                            list.forecastList.length - i - 1 == widget.listId,
+                            radius: 8,
+                          ),
+                        ))),
+            Spacer(flex: 2),
+          ],
+        ),
       );
     });
   }
@@ -246,7 +256,33 @@ class _ForecastCardState extends State<ForecastCard>
         Container(
           width: 40.0,
           child: FlatButton(
-            onPressed: () {},
+            onPressed: () {
+              showCupertinoDialog(
+                  context: context,
+                  builder: (context) {
+                    return CupertinoAlertDialog(
+                      title: Text("Usuwanie prognozy"),
+                      content: Padding(
+                        padding: const EdgeInsets.only(top: 4.0),
+                        child: Text(
+                            "Czy na pewno usunąć prognozę dla miasta ${widget
+                                .forecast.city}?"),
+                      ),
+                      actions: <Widget>[
+                        CupertinoDialogAction(
+                            child: Text("Anuluj"),
+                            onPressed: () => Navigator.of(context).pop()),
+                        CupertinoDialogAction(
+                            child: Text("Usuń"),
+                            onPressed: () {
+                              bloc.add(DeleteForecast(listIndex: widget.listId));
+                              Navigator.of(context).pop();
+                            }
+                        ),
+                      ],
+                    );
+                  });
+            },
             child: Opacity(
               opacity: 0.75,
               child: Icon(
@@ -288,10 +324,11 @@ class _ForecastCardState extends State<ForecastCard>
       case "Thunderstorm":
         return Animator(
             cycles: 5,
-            builder: (anim) => Opacity(
-                opacity: anim.value,
-                child: Image.asset('assets/icons/storm.png',
-                    width: 100.0, height: 100.0)));
+            builder: (anim) =>
+                Opacity(
+                    opacity: anim.value,
+                    child: Image.asset('assets/icons/storm.png',
+                        width: 100.0, height: 100.0)));
 
       case "Drizzle":
         return Container(
@@ -324,15 +361,16 @@ class _ForecastCardState extends State<ForecastCard>
           Opacity(
             opacity: 0.4,
             child:
-                Image.asset('assets/icons/snow.png', width: 90.0, height: 90.0),
+            Image.asset('assets/icons/snow.png', width: 90.0, height: 90.0),
           ),
           Animator(
               duration: Duration(seconds: 2),
               cycles: 7,
-              builder: (anim) => Opacity(
-                  opacity: anim.value,
-                  child: Image.asset('assets/icons/snow.png',
-                      width: 90.0, height: 90.0))),
+              builder: (anim) =>
+                  Opacity(
+                      opacity: anim.value,
+                      child: Image.asset('assets/icons/snow.png',
+                          width: 90.0, height: 90.0))),
         ]);
 
       case "Clouds":

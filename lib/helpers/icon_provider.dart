@@ -4,7 +4,7 @@ class IconProvider {
   static getIcon(String iconDesc, {double size}) {
     switch (iconDesc) {
       case "Clear":
-        return Image.asset('assets/icons/sun.png', width: size ?? 30.0, height: size ?? 30.0);
+        return Image.asset('assets/icons/sun.png', width: size ?? 60.0, height: size ?? 60.0);
 
       case "Thunderstorm":
         return Image.asset('assets/icons/storm.png',

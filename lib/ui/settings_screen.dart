@@ -30,12 +30,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       body: BlocListener(listener: (context, state) {
         if(state is DefaultForecastChangeSuccess) {
+          bloc.add(SetInitialState());
           Scaffold.of(context).showSnackBar(SnackBar(
               backgroundColor: Color.fromRGBO(50, 130, 209, 1.0),
               content: Text(
                   "Ustawiono domyślną pogodę.")));
         }
         if(state is DefaultForecastChangeFailure) {
+          bloc.add(SetInitialState());
           Scaffold.of(context).showSnackBar(SnackBar(
               backgroundColor: Color.fromRGBO(50, 130, 209, 1.0),
               content: Text(
@@ -100,7 +102,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               : CupertinoColors.systemGrey,
                         ),
                         GestureDetector(
-                          onTap: _openChangeDefaultForecastWidget,
+                          onTap: () => _openChangeDefaultForecastWidget(appState),
                           child: Container(
                               height: 30,
                               child: Row(
@@ -177,27 +179,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  void _openChangeDefaultForecastWidget() {
+  void _openChangeDefaultForecastWidget(var appState) {
     showCupertinoModalPopup(
         context: context,
         builder: (BuildContext builder) {
           return _buildBottomPicker(CupertinoPicker(
+            backgroundColor: appState.isDarkModeOn ? Colors.black : Colors.white,
             onSelectedItemChanged: (int index) {
               setState(() {
                 selectItem = index;
-
               });
             },
             itemExtent: 50.0,
             looping: false,
             squeeze: 1.4,
-            magnification: 0.8,
             children: <Widget>[
               if (list.forecastList.isEmpty)
                 Center(child: Text("Brak prognoz"))
               else
                 for (var element in list.forecastList) ...[
-                  Center(child: Text("${element.listId} ${element.forecast.city}")),
+                  Center(child: Text("${element.forecast.city}")),
                 ]
             ],
           ));
@@ -208,7 +209,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Container(
       height: 200,
       child: GestureDetector(
-        // Blocks taps from propagating to the modal sheet and popping.
         onTap: () {
           if(list.forecastList.isNotEmpty) {
             bloc.add(ChangeDefaultForecast(id: selectItem));

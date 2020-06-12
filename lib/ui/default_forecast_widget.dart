@@ -27,6 +27,7 @@ class _DefaultForecastWidgetState extends State<DefaultForecastWidget> {
 
   @override
   Widget build(BuildContext context) {
+    defaultCard = list.defaultForecast;
     return Card(
         color: widget.cardColor ?? Colors.white,
         elevation: 8.0,
@@ -77,7 +78,7 @@ class _DefaultForecastWidgetState extends State<DefaultForecastWidget> {
                           "assets/icons/sun_and_cloud.png",
                           height: 70,
                           width: 70,
-                          color: widget.textColor ?? Colors.black12,
+                          color: widget.textColor != null ? Colors.grey : Colors.black12,
                         ),
                         SizedBox(height: 10.0,),
                         Text(

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forecast/app_state_notifier.dart';
-import 'file:///C:/Users/akuzniecow/AndroidStudioProjects/forecast/lib/ui/first_screen.dart';
+import 'file:///C:/Users/akuzniecow/AndroidStudioProjects/forecast/lib/ui/home_screen.dart';
 import 'package:forecast/bloc/forecast_bloc.dart';
 import 'file:///C:/Users/akuzniecow/AndroidStudioProjects/forecast/lib/ui/settings_screen.dart';
 import 'dart:core';

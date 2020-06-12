@@ -27,39 +27,33 @@ class _ForecastListScreenState extends State<ForecastListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: BlocConsumer<ForecastBloc, ForecastState>(
-      builder: (context, state) {
-        if (state is ForecastLoading) {
-          state = ForecastInitial();
-          return Center(
-            child: CupertinoActivityIndicator(
-              animating: true,
-              radius: 15,
-            ),
-          );
-        }
-        if(state is ForecastInitial) {
-          return _buildView();
-        }
-        if (state is ForecastLoaded) {
-          state = ForecastInitial();
-          return _buildView();
-        }
-        if (state is ForecastFailure) {
-          state = ForecastInitial();
-          return NoConnectionScreen();
-        } else {
-          return Container(
-            child: Text(
-              "Coś poszło nie tak",
-              style: TextStyle(color: Colors.red),
-            ),
-          );
-        }
-      },
-      listener: (context, state) {},
-      bloc: _bloc,
-    ));
+      body: BlocConsumer<ForecastBloc, ForecastState>(
+        builder: (context, state) {
+          if (state is ForecastLoading) {
+            return Center(
+              child: CupertinoActivityIndicator(
+                animating: true,
+                radius: 15,
+              ),
+            );
+          } else if (state is ForecastFailure) {
+            state = ForecastInitial();
+            return NoConnectionScreen();
+          } else {
+            return _buildView();
+          }
+        },
+        listener: (context, state) {
+          if (state is ForecastDeleted) {
+            Scaffold.of(context).showSnackBar(SnackBar(
+                backgroundColor: Color.fromRGBO(50, 130, 209, 1.0),
+                content: Text("Usunięto prognozę")));
+            _bloc.add(SetInitialState());
+          }
+        },
+        bloc: _bloc,
+      ),
+    );
   }
 
   Widget _emptyListWidget() {
@@ -70,34 +64,39 @@ class _ForecastListScreenState extends State<ForecastListScreen> {
 
   Widget _buildView() {
     return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          border: Border(bottom: BorderSide(style: BorderStyle.none)),
-          middle: Text(
-            "Twoje prognozy",
-            style: TextStyle(fontWeight: FontWeight.w400),
-          ),
-          trailing: IconButton(
-            icon: Icon(
-              CupertinoIcons.refresh,
-              color: Color.fromRGBO(50, 130, 209, 1.0),
-            ),
-            onPressed: () {
-              _bloc.add(RefreshForecast());
-            },
-          ),
+      navigationBar: CupertinoNavigationBar(
+        border: Border(bottom: BorderSide(style: BorderStyle.none)),
+        middle: Text(
+          "Twoje prognozy",
+          style: TextStyle(fontWeight: FontWeight.w400),
         ),
-        child: (list.forecastList.isEmpty)
-            ? _emptyListWidget()
-            : Consumer<AppStateNotifier>(builder: (context, appState, child) {
-                list.forecastList = list.forecastList
-                    .map((forecastCard) => ForecastCard(
-                          forecast: forecastCard.forecast,
-                          listId: forecastCard.listId,
-                          textColor:
-                              appState.isDarkModeOn ? Colors.white : null,
-                        ))
-                    .toList();
-                return SafeArea(child: PageView(children: list.forecastList.reversed.toList()));
-              }));
+        trailing: CupertinoButton(
+          padding: EdgeInsets.only(left: 15.0),
+          child: Icon(
+            CupertinoIcons.refresh,
+            color: Color.fromRGBO(50, 130, 209, 1.0),
+            size: 30.0,
+          ),
+          onPressed: () {
+            _bloc.add(RefreshForecast());
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+      child: (list.forecastList.isEmpty)
+          ? _emptyListWidget()
+          : Consumer<AppStateNotifier>(builder: (context, appState, child) {
+              list.forecastList = list.forecastList
+                  .map((forecastCard) => ForecastCard(
+                        forecast: forecastCard.forecast,
+                        listId: forecastCard.listId,
+                        textColor: appState.isDarkModeOn ? Colors.white : null,
+                      ))
+                  .toList();
+              return SafeArea(
+                  child:
+                      PageView(children: list.forecastList.reversed.toList()));
+            }),
+    );
   }
 }

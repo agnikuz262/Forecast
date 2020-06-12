@@ -35,6 +35,9 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
 
   @override
   Stream<ForecastState> mapEventToState(ForecastEvent event) async* {
+    if(event is SetInitialState) {
+      yield ForecastInitial();
+    }
     if (event is ForecastAddCityEvent) {
       yield ForecastLoading();
       var response = await apiService.fetchCityData(event.city);
@@ -98,7 +101,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
         }
       }
     }
-    if (event is ForecastCardDeleted) {
+    if (event is DeleteForecast) {
       yield ForecastLoading();
       try {
         list.forecastList.removeAt(event.listIndex);
@@ -114,14 +117,13 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
         yield ForecastLoaded();
       } else {
         try {
-          List<ForecastCard> tempForecastList = [];
           var refreshResult = await _refreshForecastList();
           if (refreshResult == false) {
             yield ForecastFailure(error: "No connection");
             return;
           } else {
             list.forecastList.clear();
-            list.forecastList = tempForecastList;
+            list.forecastList = refreshResult;
             yield ForecastLoaded();
           }
         } catch (e) {
@@ -130,13 +132,18 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       }
     }
     if (event is ChangeDefaultForecast) {
-      var forecast = _getForecastFromList(event.id);
-      if (forecast == -1) {
-        yield DefaultForecastChangeFailure();
-      } else {
-        list.defaultForecast = forecast;
-        yield DefaultForecastChangeSuccess();
+      try {
+        var forecast = _getForecastFromList(event.id);
+        if (forecast == -1) {
+          yield DefaultForecastChangeFailure();
+        } else {
+          list.defaultForecast = forecast;
+          yield DefaultForecastChangeSuccess();
+        }
+      } catch(e) {
+        yield ForecastFailure(error: e.toString());
       }
+
     }
   }
 
@@ -146,8 +153,8 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       for (var element in list.forecastList) {
         var forecast = await apiService.fetchCityData(element.forecast.city);
         tempForecastList.add(ForecastCard(
-          listId: list.forecastList.length,
-          forecast: forecast,
+          listId: tempForecastList.length,
+          forecast: ForecastModel.fromApi(forecast),
         ));
       }
       return tempForecastList;
@@ -170,7 +177,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
 
   _getForecastFromList(int id) {
     for (int i = 0; i < list.forecastList.length; i++) {
-      if (id == list.forecastList[i].forecast.id) return list.forecastList[i];
+      if (id == list.forecastList[i].listId) return list.forecastList[i];
     }
     return -1;
   }

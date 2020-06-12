@@ -22,10 +22,10 @@ class ForecastAddCityEvent extends ForecastEvent {
 
 class ForecastAddLocalizationEvent extends ForecastEvent {}
 
-class ForecastCardDeleted extends ForecastEvent {
+class DeleteForecast extends ForecastEvent {
   final listIndex;
 
-  ForecastCardDeleted({@required this.listIndex});
+  DeleteForecast({@required this.listIndex});
 
   @override
   List<Object> get props => [listIndex];
@@ -49,3 +49,5 @@ class ChangeDefaultForecast extends ForecastEvent {
   @override
   List<Object> get props => [id];
 }
+
+class SetInitialState extends ForecastEvent {}

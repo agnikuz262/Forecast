@@ -42,10 +42,10 @@ class RefreshForecast extends ForecastEvent {
 }
 
 class ChangeDefaultForecast extends ForecastEvent {
-  final city;
+  final id;
 
-  ChangeDefaultForecast({@required this.city});
+  ChangeDefaultForecast({@required this.id});
 
   @override
-  List<Object> get props => [city];
+  List<Object> get props => [id];
 }

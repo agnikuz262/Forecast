@@ -17,10 +17,10 @@ class ForecastCard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _ForecastCardState();
   final ForecastModel forecast;
-  final int listIndex;
+  final int listId;
   final Color textColor;
 
-  ForecastCard({@required this.forecast, this.listIndex, this.textColor});
+  ForecastCard({@required this.forecast, this.listId, this.textColor});
 }
 
 class _ForecastCardState extends State<ForecastCard>
@@ -223,7 +223,7 @@ class _ForecastCardState extends State<ForecastCard>
                   (i) => Padding(
                         padding: const EdgeInsets.only(left: 4),
                         child: StepDotWidget(
-                          list.forecastList.length - i - 1 == widget.listIndex,
+                          list.forecastList.length - i - 1 == widget.listId,
                           radius: 8,
                         ),
                       ))),

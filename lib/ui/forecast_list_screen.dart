@@ -92,12 +92,12 @@ class _ForecastListScreenState extends State<ForecastListScreen> {
                 list.forecastList = list.forecastList
                     .map((forecastCard) => ForecastCard(
                           forecast: forecastCard.forecast,
-                          listIndex: forecastCard.listIndex,
+                          listId: forecastCard.listId,
                           textColor:
                               appState.isDarkModeOn ? Colors.white : null,
                         ))
                     .toList();
-                return SafeArea(child: PageView(children: list.forecastList));
+                return SafeArea(child: PageView(children: list.forecastList.reversed.toList()));
               }));
   }
 }

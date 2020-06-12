@@ -29,9 +29,9 @@ class _FirstScreenState extends State<FirstScreen> {
   void initState() {
     super.initState();
     bloc = BlocProvider.of<ForecastBloc>(context);
-     // ..add(ForecastAddCityEvent(city: city));
+    // ..add(ForecastAddCityEvent(city: city));
     //todo żeby działało
-   // bloc.add(RefreshForecast());
+    // bloc.add(RefreshForecast());
     _refreshCompleter = Completer<void>();
   }
 
@@ -41,9 +41,6 @@ class _FirstScreenState extends State<FirstScreen> {
       resizeToAvoidBottomInset: false,
       body: BlocConsumer<ForecastBloc, ForecastState>(
         builder: (context, state) {
-          if (state is ForecastInitial) {
-            return _buildView(context);
-          }
           if (state is ForecastLoading) {
             return Center(
                 child: CupertinoActivityIndicator(
@@ -51,67 +48,23 @@ class _FirstScreenState extends State<FirstScreen> {
               animating: true,
             ));
           }
-          if (state is ForecastLoaded) {
+          if (state is ForecastFailure) {
+            isConnection = false;
+            state = ForecastInitial();
+            return NoConnectionScreen();
+          } else {
             isConnection = true;
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
             state = ForecastInitial();
             return _buildView(context);
           }
-          if (state is ForecastAlreadySaved) {
-            isConnection = true;
-            state = ForecastInitial();
-            return _buildView(context);
-          }
-          if (state is ForecastFailure) {
-            isConnection = false;
-            state = ForecastInitial();
-            return NoConnectionScreen();
-          }
-          if (state is ForecastDeleted) {
-            state = ForecastInitial();
-            return _buildView(context);
-          }
-          if (state is ForecastNoGps) {
-            isConnection = true;
-            state = ForecastInitial();
-            return _buildView(context);
-          }
-          if (state is LocationPermissionDenied) {
-            isConnection = true;
-            state = ForecastInitial();
-            return _buildView(context);
-          }
-          if (state is LocationPermissionRestricted) {
-            isConnection = true;
-            state = ForecastInitial();
-            return _buildView(context);
-          }
-          if (state is ForecastNotFound) {
-            state = ForecastInitial();
-            return _buildView(context);
-          } else
-            return Center(
-              child: Text(
-                "Coś poszło nie tak",
-                style: TextStyle(color: Colors.red),
-              ),
-            );
         },
         listener: (BuildContext context, ForecastState state) {
           if (state is ForecastDeleted) {
+            //todo ?? remove??
             setState(() {});
             state = ForecastInitial();
-          }
-          if (state is ForecastInitial) {
-            Center();
-          }
-          if (state is ForecastLoading) {
-            Center(
-                child: CupertinoActivityIndicator(
-              animating: true,
-              radius: 15,
-            ));
           }
           if (state is ForecastLoaded) {
             setState(() {
@@ -148,7 +101,6 @@ class _FirstScreenState extends State<FirstScreen> {
             state = ForecastInitial();
           }
           if (state is ForecastNotFound) {
-            print("not found");
             state = ForecastInitial();
             Scaffold.of(context).showSnackBar(SnackBar(
                 backgroundColor: Color.fromRGBO(50, 130, 209, 1.0),
@@ -167,6 +119,9 @@ class _FirstScreenState extends State<FirstScreen> {
                 backgroundColor: Color.fromRGBO(50, 130, 209, 1.0),
                 content: Text(
                     "Obowiązują restrykcje. Możesz to zmienić w ustawieniach urządzenia.")));
+          }
+          if (state is DefaultForecastChangeSuccess) {
+            setState(() {});
           }
         },
       ),

@@ -36,3 +36,7 @@ class ForecastFailure extends ForecastState {
   @override
   String toString() => 'ForecastFailure { error: $error }';
 }
+
+class DefaultForecastChangeSuccess extends ForecastState {}
+
+class DefaultForecastChangeFailure extends ForecastState {}

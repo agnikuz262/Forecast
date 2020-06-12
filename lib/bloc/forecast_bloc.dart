@@ -24,15 +24,13 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
   }
 
   void _addLocalizationForecastToList(WeatherData weatherData) {
-    list.forecastList.insert(
-        0,
-        ForecastCard(
-            forecast: ForecastModel.fromApi(weatherData),
-            listIndex: list.forecastList.length));
+    list.forecastList.add(ForecastCard(
+        forecast: ForecastModel.fromApi(weatherData),
+        listId: list.forecastList.length));
     //todo remove
     list.defaultForecast = ForecastCard(
         forecast: ForecastModel.fromApi(weatherData),
-        listIndex: list.forecastList.length);
+        listId: list.forecastList.length);
   }
 
   @override
@@ -42,10 +40,8 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       var response = await apiService.fetchCityData(event.city);
       if (response is WeatherData) {
         ForecastModel newForecast = ForecastModel.fromApi(response);
-        list.forecastList.insert(
-            0,
-            ForecastCard(
-                forecast: newForecast, listIndex: list.forecastList.length));
+        list.forecastList.add(ForecastCard(
+            forecast: newForecast, listId: list.forecastList.length));
         yield ForecastLoaded();
       } else if (response == true) {
         yield ForecastNotFound();
@@ -133,6 +129,15 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
         }
       }
     }
+    if (event is ChangeDefaultForecast) {
+      var forecast = _getForecastFromList(event.id);
+      if (forecast == -1) {
+        yield DefaultForecastChangeFailure();
+      } else {
+        list.defaultForecast = forecast;
+        yield DefaultForecastChangeSuccess();
+      }
+    }
   }
 
   Future _refreshForecastList() async {
@@ -141,7 +146,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       for (var element in list.forecastList) {
         var forecast = await apiService.fetchCityData(element.forecast.city);
         tempForecastList.add(ForecastCard(
-          listIndex: list.forecastList.length,
+          listId: list.forecastList.length,
           forecast: forecast,
         ));
       }
@@ -161,5 +166,12 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
     } on SocketException catch (_) {
       return false;
     }
+  }
+
+  _getForecastFromList(int id) {
+    for (int i = 0; i < list.forecastList.length; i++) {
+      if (id == list.forecastList[i].forecast.id) return list.forecastList[i];
+    }
+    return -1;
   }
 }

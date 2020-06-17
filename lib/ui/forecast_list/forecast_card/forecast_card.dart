@@ -5,14 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forecast/app_state_notifier.dart';
 import 'package:forecast/bloc/forecast_bloc.dart';
 import 'package:forecast/bloc/forecast_event.dart';
+import 'package:forecast/helpers/string_formatter.dart';
 import 'package:forecast/model/api/forecast_model.dart';
-import 'package:forecast/ui/forecast_card/step_dot_widget.dart';
+import 'package:forecast/ui/forecast_list/forecast_card/step_dot_widget.dart';
+import 'package:forecast/utils/custom_styles.dart';
 import 'package:provider/provider.dart';
-import '../../helpers/string_formatter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../utils/custom_styles.dart';
-import 'package:forecast/ui/forecast_card/forecast_card_list.dart' as list;
+import 'package:forecast/ui/forecast_list/forecast_card/forecast_card_list.dart' as list;
 
 class ForecastCard extends StatefulWidget {
   @override

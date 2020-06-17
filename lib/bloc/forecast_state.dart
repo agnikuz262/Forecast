@@ -16,7 +16,11 @@ class ForecastNotFound extends ForecastState {}
 
 class ForecastDeleted extends ForecastState {}
 
-class ForecastLoaded extends ForecastState {}
+class ForecastLoaded extends ForecastState {
+  final bool navigateToList;
+
+  ForecastLoaded({@required this.navigateToList});
+}
 
 class ForecastAlreadySaved extends ForecastState {}
 
@@ -28,6 +32,7 @@ class LocationPermissionRestricted extends ForecastState {}
 
 class ForecastFailure extends ForecastState {
   final String error;
+
   const ForecastFailure({@required this.error});
 
   @override

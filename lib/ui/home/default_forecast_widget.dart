@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:forecast/ui/forecast_card/forecast_card.dart';
-import 'package:forecast/ui/forecast_card/forecast_card_list.dart' as list;
-import 'package:forecast/ui/forecast_list_screen.dart';
+import 'package:forecast/ui/forecast_list/forecast_card/forecast_card.dart';
+import 'package:forecast/ui/forecast_list/forecast_card/forecast_card_list.dart'
+    as list;
 import 'package:forecast/helpers/icon_provider.dart';
+import 'package:forecast/ui/forecast_list/forecast_list_screen.dart';
 import 'package:forecast/utils/custom_styles.dart';
 
 class DefaultForecastWidget extends StatefulWidget {
@@ -66,21 +67,27 @@ class _DefaultForecastWidgetState extends State<DefaultForecastWidget> {
                     height: 180,
                     child: Center(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
                           "Brak domyślnej prognozy.",
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.grey, fontSize: 16),
                         ),
-                        SizedBox(height: 5.0,),
+                        SizedBox(
+                          height: 5.0,
+                        ),
                         Image.asset(
                           "assets/icons/sun_and_cloud.png",
                           height: 70,
                           width: 70,
-                          color: widget.textColor != null ? Colors.grey : Colors.black12,
+                          color: widget.textColor != null
+                              ? Colors.grey
+                              : Colors.black12,
                         ),
-                        SizedBox(height: 10.0,),
+                        SizedBox(
+                          height: 10.0,
+                        ),
                         Text(
                           "Po dodaniu prognoz, ustaw ją w zakładce Ustawienia.",
                           textAlign: TextAlign.center,

@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forecast/app_state_notifier.dart';
-import 'file:///C:/Users/akuzniecow/AndroidStudioProjects/forecast/lib/ui/home_screen.dart';
 import 'package:forecast/bloc/forecast_bloc.dart';
-import 'file:///C:/Users/akuzniecow/AndroidStudioProjects/forecast/lib/ui/settings_screen.dart';
+import 'package:forecast/ui/home/home_screen.dart';
+import 'package:forecast/ui/settings/settings_screen.dart';
 import 'dart:core';
 import 'package:provider/provider.dart';
 
@@ -31,7 +31,8 @@ class MyApp extends StatelessWidget {
                           fontFamily: 'San Francisco', color: Colors.white)),
                   scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
                   brightness: Brightness.dark,
-                  primaryColor: Color.fromRGBO(50, 130, 209, 1.0),)
+                  primaryColor: Color.fromRGBO(50, 130, 209, 1.0),
+                )
               : CupertinoThemeData(
                   scaffoldBackgroundColor: Color.fromRGBO(240, 240, 240, 1),
                   brightness: Brightness.light,
@@ -78,13 +79,13 @@ class _MyHomePageState extends State<MyHomePage> {
       tabBuilder: (context, i) {
         switch (i) {
           case 0:
-            return FirstScreen();
+            return HomeScreen();
             break;
           case 1:
             return SettingsScreen();
             break;
           default:
-            return FirstScreen();
+            return HomeScreen();
             break;
         }
       },

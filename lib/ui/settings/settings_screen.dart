@@ -5,9 +5,9 @@ import 'package:forecast/app_state_notifier.dart';
 import 'package:forecast/bloc/forecast_bloc.dart';
 import 'package:forecast/bloc/forecast_event.dart';
 import 'package:forecast/bloc/forecast_state.dart';
-import 'package:forecast/ui/info_screen.dart';
+import 'file:///C:/Users/akuzniecow/AndroidStudioProjects/forecast/lib/ui/settings/info_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:forecast/ui/forecast_card/forecast_card_list.dart' as list;
+import 'package:forecast/ui/forecast_list/forecast_card/forecast_card_list.dart' as list;
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -197,9 +197,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               if (list.forecastList.isEmpty)
                 Center(child: Text("Brak prognoz"))
               else
-                for (var element in list.forecastList) ...[
+                for (var element in list.forecastList)
                   Center(child: Text("${element.forecast.city}")),
-                ]
+
             ],
           ));
         });

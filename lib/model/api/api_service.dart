@@ -7,18 +7,24 @@ class ApiService {
   final String apiKey = "b6dc63335a86e575b1eab4dc075c87b1";
 
   Future fetchCityData(String city) async {
-    final response = await http.get(
-        "https://api.openweathermap.org/data/2.5/weather?q=$city&units=metric&appid=$apiKey&lang=pl");
+    try {
+      final response = await http
+          .get(
+              "https://api.openweathermap.org/data/2.5/weather?q=$city&units=metric&appid=$apiKey&lang=pl")
+          .timeout(Duration(seconds: 7));
 
-    if (response.statusCode == 200) {
-      try {
-        return WeatherData.fromJson(json.decode(response.body));
-      } catch (_) {
+      if (response.statusCode == 200) {
+        try {
+          return WeatherData.fromJson(json.decode(response.body));
+        } catch (_) {
+          return true;
+        }
+      } else if (response.statusCode == 404) {
         return true;
+      } else {
+        return false;
       }
-    } else if(response.statusCode == 404) {
-      return true;
-    } else {
+    } catch (_) {
       return false;
     }
   }

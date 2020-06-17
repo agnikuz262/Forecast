@@ -5,8 +5,9 @@ import 'package:forecast/app_state_notifier.dart';
 import 'package:forecast/bloc/forecast_bloc.dart';
 import 'package:forecast/bloc/forecast_event.dart';
 import 'package:forecast/bloc/forecast_state.dart';
-import 'package:forecast/ui/forecast_card/forecast_card_list.dart' as list;
-import 'package:forecast/ui/forecast_card/forecast_card.dart';
+import 'package:forecast/ui/forecast_list/forecast_card/forecast_card_list.dart'
+    as list;
+import 'package:forecast/ui/forecast_list/forecast_card/forecast_card.dart';
 import 'package:forecast/ui/no_connection_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -57,9 +58,15 @@ class _ForecastListScreenState extends State<ForecastListScreen> {
   }
 
   Widget _emptyListWidget() {
-    return Center(
-      child: Text("Brak dodanych prognoz"),
-    );
+    return Consumer<AppStateNotifier>(builder: (context, appState, child) {
+      return Center(
+        child: Text(
+          "Brak dodanych prognoz",
+          style: TextStyle(
+              color: appState.isDarkModeOn ? Colors.white : Colors.black),
+        ),
+      );
+    });
   }
 
   Widget _buildView() {

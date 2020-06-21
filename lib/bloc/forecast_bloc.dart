@@ -7,7 +7,8 @@ import 'package:bloc/bloc.dart';
 import 'package:forecast/bloc/forecast_event.dart';
 import 'package:forecast/bloc/forecast_state.dart';
 import 'package:forecast/model/api/weather_data.dart';
-import 'package:forecast/ui/forecast_list/forecast_card/forecast_card_list.dart' as list;
+import 'package:forecast/ui/forecast_list/forecast_card/forecast_card_list.dart'
+    as list;
 import 'package:permission_handler/permission_handler.dart';
 
 class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
@@ -38,10 +39,16 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       yield ForecastLoading();
       var response = await apiService.fetchCityData(event.city);
       if (response is WeatherData) {
-        ForecastModel newForecast = ForecastModel.fromApi(response);
-        list.forecastList.add(ForecastCard(
-            forecast: newForecast, listId: list.forecastList.length));
-        yield ForecastLoaded(navigateToList: true);
+        if (!_forecastInList(response)) {
+          ForecastModel newForecast = ForecastModel.fromApi(response);
+          list.forecastList.add(ForecastCard(
+              forecast: newForecast, listId: list.forecastList.length));
+          yield ForecastLoaded(navigateToList: true);
+          return;
+        } else {
+          yield ForecastAlreadySaved();
+          return;
+        }
       } else if (response == true) {
         yield ForecastNotFound();
       } else {
@@ -52,49 +59,54 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       yield ForecastLoading();
       Position position;
       PermissionStatus permissionStatus;
-      permissionStatus = await Permission.location.status;
+      try {
+        permissionStatus = await Permission.location.status;
 
-      if (permissionStatus.isUndetermined) {
-        permissionStatus = await Permission.location.request();
-      }
-      if (permissionStatus.isDenied) {
-        yield LocationPermissionDenied();
-        return;
-      } else if (permissionStatus.isPermanentlyDenied) {
-        yield LocationPermissionDenied();
-        return;
-      } else if (permissionStatus.isRestricted) {
-        yield LocationPermissionRestricted();
-        return;
-      } else if (permissionStatus.isGranted) {
-        try {
-          position = await Geolocator()
-              .getCurrentPosition()
-              .timeout(Duration(seconds: 5));
+        if (permissionStatus.isUndetermined) {
+          permissionStatus =
+              await Permission.location.request().timeout(Duration(seconds: 10));
+        }
+        if (permissionStatus.isDenied) {
+          yield LocationPermissionDenied();
+          return;
+        } else if (permissionStatus.isPermanentlyDenied) {
+          yield LocationPermissionDenied();
+          return;
+        } else if (permissionStatus.isRestricted) {
+          yield LocationPermissionRestricted();
+          return;
+        } else if (permissionStatus.isGranted) {
+          try {
+            position = await Geolocator()
+                .getCurrentPosition()
+                .timeout(Duration(seconds: 5));
 
-          var response = await apiService.fetchLocalizationData(
-              position.latitude, position.longitude);
-          if (response is WeatherData) {
-            if (!_forecastInList(response)) {
-              _addLocalizationForecastToList(response);
+            var response = await apiService.fetchLocalizationData(
+                position.latitude, position.longitude);
+            if (response is WeatherData) {
+              if (!_forecastInList(response)) {
+                _addLocalizationForecastToList(response);
 
-              yield ForecastLoaded(navigateToList: true);
+                yield ForecastLoaded(navigateToList: true);
+                return;
+              } else {
+                yield ForecastAlreadySaved();
+                return;
+              }
+            } else if (response == true) {
+              yield ForecastNotFound();
               return;
             } else {
-              yield ForecastAlreadySaved();
-              return;
+              yield ForecastFailure(error: "No connection");
             }
-          } else if (response == true) {
-            yield ForecastNotFound();
+          } catch (e) {
+            print("geolocator error ${e.toString()}");
+            yield ForecastNoGps();
             return;
-          } else {
-            yield ForecastFailure(error: "No connection");
           }
-        } catch (e) {
-          print("geolocator error ${e.toString()}");
-          yield ForecastNoGps();
-          return;
         }
+      } catch (e) {
+        yield ForecastFailure(error: "Premission request timeout");
       }
     }
     if (event is DeleteForecast) {
@@ -103,7 +115,6 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
         list.forecastList.removeAt(event.listIndex);
         yield ForecastDeleted();
       } catch (_) {
-        //todo zmienic na delete failure
         yield ForecastFailure(error: "Nie udało się usunąć prognozy");
       }
     }
@@ -114,7 +125,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
           yield ForecastLoaded(navigateToList: false);
         } else {
           try {
-            var refreshResult = await _refreshForecastList();
+            var refreshResult = await refreshForecastList();
             if (refreshResult == false) {
               yield ForecastFailure(error: "No connection");
               return;
@@ -146,7 +157,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
     }
   }
 
-  Future _refreshForecastList() async {
+  Future refreshForecastList() async {
     List<ForecastCard> tempForecastList = [];
     for (var element in list.forecastList) {
       var forecast = await apiService.fetchCityData(element.forecast.city);

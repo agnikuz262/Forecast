@@ -27,6 +27,8 @@ dependencies:
   build_runner: 1.8.0
   permission_handler: 5.0.0+hotfix.3
   geolocator: 5.3.1
+  mockito: 4.1.1
+  bloc_test: 4.0.0
   provider: ^4.0.5+1
   flutter:
     sdk: flutter

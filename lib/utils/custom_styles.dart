@@ -7,6 +7,7 @@ class CustomStyles {
   static Color lightPrimaryColor = Color(0xFF4f83cc);
   static var circularProgressColor =
       AlwaysStoppedAnimation<Color>(Colors.white);
+  static Color appGray = Colors.grey[850];
 
   static TextStyle cityStyle = TextStyle(
       color: Colors.grey[800],

@@ -44,7 +44,7 @@ class InfoScreen extends StatelessWidget {
                     ),
                     Text(
                       "Pogoda",
-                      style: CustomStyles.tempStyle.copyWith(fontSize: 35),
+                      style: TextStyle(fontSize: 32),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40.0),
@@ -53,20 +53,22 @@ class InfoScreen extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             "Aplikacja Pogoda służy do informowania użytkownika o aktualnej pogodzie dla wybranych przez siebie miast lub lokalizacji.",
-                            style: TextStyle(color: Colors.black),
                           ),
                           SizedBox(
                             height: 50.0,
                           ),
-                          Text("Autorzy:",
-                              style: TextStyle(color: Colors.black)),
+                          Text(
+                            "Autorzy:",
+                          ),
                           SizedBox(
                             height: 10.0,
                           ),
-                          Text("Agnieszka Kuźniecow",
-                              style: TextStyle(color: Colors.black)),
-                          Text("Michał Grzyśka",
-                              style: TextStyle(color: Colors.black))
+                          Text(
+                            "Agnieszka Kuźniecow",
+                          ),
+                          Text(
+                            "Michał Grzyśka",
+                          )
                         ],
                       ),
                     ),

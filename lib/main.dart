@@ -12,10 +12,10 @@ void main() => runApp(ChangeNotifierProvider<AppStateNotifier>(
     create: (context) => AppStateNotifier(),
     child: BlocProvider<ForecastBloc>(
       create: (BuildContext context) => ForecastBloc(),
-      child: MyApp(),
+      child: ForecastApp(),
     )));
 
-class MyApp extends StatelessWidget {
+class ForecastApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<AppStateNotifier>(

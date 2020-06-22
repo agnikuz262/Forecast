@@ -8,12 +8,13 @@ import 'package:forecast/ui/settings/settings_screen.dart';
 import 'dart:core';
 import 'package:provider/provider.dart';
 
-void main() => runApp(ChangeNotifierProvider<AppStateNotifier>(
-    create: (context) => AppStateNotifier(),
-    child: BlocProvider<ForecastBloc>(
-      create: (BuildContext context) => ForecastBloc(),
-      child: ForecastApp(),
-    )));
+void main() =>
+    runApp(ChangeNotifierProvider<AppStateNotifier>(
+        create: (context) => AppStateNotifier(),
+        child: BlocProvider<ForecastBloc>(
+          create: (BuildContext context) => ForecastBloc(),
+          child: ForecastApp(),
+        )));
 
 class ForecastApp extends StatelessWidget {
   @override
@@ -25,38 +26,38 @@ class ForecastApp extends StatelessWidget {
           title: 'Pogoda',
           theme: appState.isDarkModeOn
               ? CupertinoThemeData(
-                  barBackgroundColor: Color.fromRGBO(25, 25, 25, 1),
-                  textTheme: CupertinoTextThemeData(
-                      textStyle: TextStyle(
-                          fontFamily: 'San Francisco', color: Colors.white)),
-                  scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
-                  brightness: Brightness.dark,
-                  primaryColor: Color.fromRGBO(50, 130, 209, 1.0),
-                )
+            barBackgroundColor: Color.fromRGBO(25, 25, 25, 1),
+            textTheme: CupertinoTextThemeData(
+                textStyle: TextStyle(
+                    fontFamily: 'San Francisco', color: Colors.white)),
+            scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
+            brightness: Brightness.dark,
+            primaryColor: Color.fromRGBO(50, 130, 209, 1.0),
+          )
               : CupertinoThemeData(
-                  scaffoldBackgroundColor: Color.fromRGBO(240, 240, 240, 1),
-                  brightness: Brightness.light,
-                  barBackgroundColor: Color.fromRGBO(240, 240, 240, 1),
-                  textTheme: CupertinoTextThemeData(
-                      textStyle: TextStyle(
-                          fontFamily: 'San Francisco', color: Colors.black)),
-                  primaryColor: Color.fromRGBO(50, 130, 209, 1.0)),
-          home: MyHomePage(title: 'Pogoda'),
+              scaffoldBackgroundColor: Color.fromRGBO(240, 240, 240, 1),
+              brightness: Brightness.light,
+              barBackgroundColor: Color.fromRGBO(240, 240, 240, 1),
+              textTheme: CupertinoTextThemeData(
+                  textStyle: TextStyle(
+                      fontFamily: 'San Francisco', color: Colors.black)),
+              primaryColor: Color.fromRGBO(50, 130, 209, 1.0)),
+          home: MainPage(title: 'Pogoda'),
         );
       },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class MainPage extends StatefulWidget {
+  MainPage({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
@@ -64,32 +65,36 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.home),
-              title: Text(
-                "Główna",
-              )),
-          BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.settings), title: Text("Ustawienia")),
-        ],
-      ),
-      tabBuilder: (context, i) {
-        switch (i) {
-          case 0:
-            return HomeScreen();
-            break;
-          case 1:
-            return SettingsScreen();
-            break;
-          default:
-            return HomeScreen();
-            break;
-        }
-      },
-      resizeToAvoidBottomInset: false,
-    );
+    return Consumer<AppStateNotifier>(builder: (context, appState, child) {
+      return CupertinoTabScaffold(
+        tabBar: CupertinoTabBar(
+          backgroundColor: appState.isDarkModeOn ? null : Colors.white,
+          
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(CupertinoIcons.home),
+                title: Text(
+                  "Główna",
+                )),
+            BottomNavigationBarItem(
+                icon: Icon(CupertinoIcons.settings), title: Text("Ustawienia")),
+          ],
+        ),
+        tabBuilder: (context, i) {
+          switch (i) {
+            case 0:
+              return HomeScreen();
+              break;
+            case 1:
+              return SettingsScreen();
+              break;
+            default:
+              return HomeScreen();
+              break;
+          }
+        },
+        resizeToAvoidBottomInset: false,
+      );
+    });
   }
 }
